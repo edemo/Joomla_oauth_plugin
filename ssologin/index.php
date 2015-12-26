@@ -1,6 +1,6 @@
 <?php
 /** 
- * soo login integráció joomla 3.x rendszerhez
+ * SSO login integráció joomla 3.x rendszerhez
  * Licensz: GNU/GPL
  * Szerző: Tibor Fogler 
  * Szerző email: tibor.fogler@gmail.com
@@ -72,14 +72,14 @@ class sso_obj {
           "email"=>$email,
           "block"=>0,
           "groups"=>array("1","2")
-      );
-      $user = new JUser;
-      if(!$user->bind($data)) {
-          $result = "Could not bind data. Error: " . $user->getError();
-      }
-      if (!$user->save()) {
-          $result = "Could not save user. Error: " . $user->getError();
-      }
+          );
+          $user = new JUser;
+          if (!$user->bind($data)) {
+             $result = "Could not bind data. Error: " . $user->getError();
+          }
+          if (!$user->save()) {
+             $result = "Could not save user. Error: " . $user->getError();
+          }
 	  return $result;	
 	}
 
@@ -90,11 +90,11 @@ class sso_obj {
 	*/  
 	public function loginToJoomla($userData,&$mainframe) {
 	    $credentials = array();
-		$credentials['username'] = $userData->userid;
-		$credentials['password'] = $this->PSW;
-		$error = $mainframe->login($credentials);
-		$user = JFactory::getUser();
-		return $user;
+	    $credentials['username'] = $userData->userid;
+	    $credentials['password'] = $this->PSW;
+	    $error = $mainframe->login($credentials);
+	    $user = JFactory::getUser();
+	    return $user;
 	}
 
 	// SSO szerver elérés  interface rutinok
@@ -114,10 +114,10 @@ class sso_obj {
 			$extraHeader .= "\r\n";
 		}	
 		$options = array(
-			'http' => array(
-				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
-				'method'=> $method,
-				'content' => http_build_query($data)
+		    'http' => array(
+			'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
+			'method'=> $method,
+			'content' => http_build_query($data)
 		    )
 		);
 		$context  = stream_context_create($options);
@@ -160,12 +160,12 @@ class sso_obj {
 		$userData = new stdClass();
 		$url = $this->SSO_USER_URI;
 		$data = array('timeout' => 30,
-					'redirection' => 10,
-					'httpversion' => '1.0',
-				   'blocking' => true,
-					'cookies' => array(),
-				  'sslverify' => $this->sslverify 
-	    );
+				'redirection' => 10,
+				'httpversion' => '1.0',
+			   'blocking' => true,
+				'cookies' => array(),
+			  'sslverify' => $this->sslverify 
+	        );
 		$extraHeader = 'Authorization: Bearer '.$token->access_token;
 		$result = $this->remoteCall($url,'GET',$data,$extraHeader);
 		if ($result != '') {
@@ -185,7 +185,7 @@ class sso_obj {
 	  $redirectURI = $this->home.'/ssologin/index.php';	
 	  $redirectURI = str_replace('http:','https:',$redirectURI);
 	  $url = $this->SSO_AUTH_URI.'?response_type=code&client_id='.$this->appkey.'&redirect_uri='.urlencode($redirectURI);
-      header('Location: '.$url);
+          header('Location: '.$url);
 	}
 
 	/**
@@ -196,15 +196,15 @@ class sso_obj {
 	*/  
 	public function doLogin(&$mainframe) {
 
-		// get token	
+	    // get token	
 	    $token = $this->getSSOtoken(JRequest::getVar('code'));
 
-		// get user data
-		if (isset($token->access_token)) {
-			$userData = $this->getSSOuserData($token);
-		}
+	    // get user data
+	    if (isset($token->access_token)) {
+		$userData = $this->getSSOuserData($token);
+	    }
 
-		if (isset($userData->userid)) {
+	    if (isset($userData->userid)) {
 		  // registered user?	
 		  $userId = $this->checkUser($userData->userid, $userData->email);
 		  if ($userId == 0) {
