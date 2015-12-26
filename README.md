@@ -1,2 +1,2 @@
-# yoomla_oauth_plugin
-Yoomla plugin for logging in with eDemo SSO service
+# Joomla_oauth_plugin
+Joomla plugin for logging in with eDemo SSO service
