@@ -14,6 +14,11 @@
  * Ha a látogató belépet az SSO login képernyőn; akkor a Joomla homepage-ra kerül.
  *
  * Módositsad ennek a fájlnak a "config" részét!
+ *
+ * Továbbfejlesztési lehetőségek: u
+ * régi fiók összekapcsolása SSO -val 
+ *    - user.params -ba (JSON) beirni az SSOid -t
+ *    - checkUser a user.params alapján is próbáljon keresni
 */ 
 
 class sso_obj {
@@ -26,9 +31,10 @@ class sso_obj {
 	// -------------- config ---------------------------------
 	protected $appkey = '';
 	protected $secret = '';
-	protected $PSW = '';  // a Joomla rendszerben ez lesz az generált SSO accountok jelszava
-	protected $home = 'http://joomla_site_domain.hu';  // tartalmazza a http:// vagy https:// -t, 
-	         // de ne tartalmazza az /index.php -t! pl: http://li-de.tk
+	protected $PSW = '';
+	protected $home = '';  // tartalmazza a http:// vagy https:// -t, 
+	                       // de ne tartalmazza az /index.php -t!
+	protected $nickHelp = 'Ha gravatar képet töltesz fel, akkor ezt az email címet kell megadnod.<br />Válassz egy "álnevet"! A li-de rendszerben a többi felhasználó ezen a néven fog téged ismerni, ez jelenik meg a tevékenységeidnél. (Természetesen a valódi neved is megadhatod itt)';
 	// -------------- config ---------------------------------
 
 	// Joomla rendszer interface rutinok	
@@ -36,11 +42,11 @@ class sso_obj {
 	
 	/**
 	  * ellenörzi, hogy a paraméterben megaadott user a joomlában regisztrálva van-e ?
-	  * @return integer Ha igen akkor user_id, ha nem akkor 0
-	  * @param string user nick name
+	  * @return integer Ha igen akkor Joomla user_id, ha nem akkor 0
+	  * @param string user SSOid 
 	  * @param string user e-mail
 	*/  
-	protected function checkUser($username, $email) {
+	protected function checkUser($ssoid, $email) {
 		$result = 0;
 		$res = false;	
 		$db = JFactory::getDBO();
@@ -49,10 +55,16 @@ class sso_obj {
 		if ($res) {
 			$result = $res->id;
 		} else {	
-		  $db->setQuery('select * from #__users where username = '.$db->quote($username));
+		  $db->setQuery('select * from #__users where username = '.$db->quote($ssoid));
 		  $res = $db->loadObject();
 		  if ($res) {
 			  $result = $res->id;
+		  } else {
+			$db->setQuery('select * from #__users where params = "{\"SSO\":\"'.$db->quote($ssoid).'\"}"');
+			$res = $db->loadObject();
+			if ($res) {
+			  $result = $res->id;
+			}  
 		  }
 		}
 		return $result;
@@ -62,13 +74,15 @@ class sso_obj {
 	  * Új user account létrehozása a Joomlába
 	  * @return string  Ha sikeres akkor '', ha hibás akkor hibaüzenet
 	*/  
-	protected function registUser($username, $email) {
+	protected function registUser($ssoid,$username, $email, $assurance) {
 	  $result = '';
 	  $data = array(
           "name"=>$username,
           "username"=>$username,
           "password"=>$this->PSW,
           "password2"=>$this->PSW,
+		  "params"=>JSON_decode('{"SSO":"'.$ssoid.'"}'),
+		  "activation"=>$assurance,
           "email"=>$email,
           "block"=>0,
           "groups"=>array("1","2")
@@ -85,17 +99,55 @@ class sso_obj {
 
 	/**
 	  * login a joomla rendszerbe
-	  * @param object userData {"userid":"xxxxxxxx", "email":"xxxxxxxx",......}
+	  * @param integer Joomla userId
 	  * @return object JUser   {"id":####, "username":"xxxxx", "email":"xxxxxx",.....}
 	*/  
-	public function loginToJoomla($userData,&$mainframe) {
+	public function loginToJoomla($userId,&$mainframe) {
+		$user = JFactory::getUser($userId);
 	    $credentials = array();
-		$credentials['username'] = $userData->userid;
+		$credentials['username'] = $user->username;
 		$credentials['password'] = $this->PSW;
+		$user->id = 0; // biztos ami biztos...
 		$error = $mainframe->login($credentials);
 		$user = JFactory::getUser();
 		return $user;
 	}
+
+	/**
+	  * SSO regisstráció képernyő (nick név megadása)
+	  * @return void
+	  * @param string sso rendszerbeli id
+	  * @param string sso rendszer beli email
+	  * @param assurance sso hitelesitési szint
+	  * @param string üzenet szöveg
+	*/  
+	public function registForm($ssoid, $ssoemail, $assurance, $msg) {
+		echo '
+		<!DOCTYPE html>
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="hu-hu" lang="hu-hu" dir="ltr">
+		<head>
+		  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		  <script src="http://code.jquery.com/jquery-latest.js"></script>
+		</head>
+		<body>
+		<form id="ssoregist" method="post" action="'.$home.'/ssologin/index.php">
+		  <h3>Első belépés SSO rendszeren keresztül</h3>
+		  <div class="ssoRegistMsg">'.$msg.'</div>
+		  <input type="hidden" name="ssoid" value="'.$ssoid.'" />
+		  <input type="hidden" name="ssoemail" value="'.$ssoemail.'" />
+		  <input type="hidden" name="assurance" value="'.$assurance.'" />
+		  <p>SSO azonositó:&nbsp;&nbsp;<var>'.$ssoid.'</var></p>
+		  <p>SSO email:&nbsp;&nbsp;&nbsp;<var>'.$ssoemail.'</var></p>
+		  <p>'.$this->nickHelp.'</p>
+		  <p>Álnév:<input type="text" name="nick" value="" size="60" />
+		  <button type="submit">Rendben</button></p>
+		</form>
+		</body>
+		</html>
+		';
+	}
+
+
 
 	// SSO szerver elérés  interface rutinok
 	// =====================================
@@ -199,42 +251,90 @@ class sso_obj {
 		// get token	
 	    $token = $this->getSSOtoken(JRequest::getVar('code'));
 
+		//DBG echo 'JFactory::user='.JFactory::getUser()->username.'<br />';
+		//DBG echo 'token='.JSON_encode($token).'<br />';
+		
 		// get user data
 		if (isset($token->access_token)) {
 			$userData = $this->getSSOuserData($token);
 		}
+
+		//DBG echo 'userData='.JSON_encode($userData).'<br />';
 
 		if (isset($userData->userid)) {
 		  // registered user?	
 		  $userId = $this->checkUser($userData->userid, $userData->email);
 		  if ($userId == 0) {
 			  // create new user
-			  $s = $this->registUser($userData->userid, $userData->email);
-			  if ($s != '') {
-				echo '<p>'.$s.'</p>';
-			  }
+			  $this->registForm($userData->userid, 
+			                    $userData->email, 
+								JSON_encode($userData->assurances), 
+								'');
+
 			  // registered user?
 		      $userId = $this->checkUser($userData->userid, $userData->email);
-		  }
-		  if ($userId > 0) {
+		  } else {
+			  
 			  // try login into joomla
-			  $user = $this->loginToJoomla($userData, $mainframe);
+			  $user = $this->loginToJoomla($userId, $mainframe);
 			  if ($user->id > 0) {
+				if ($user->activation != JSON_encode($userData->assurances)) {  
+				  $user->activation = JSON_encode($userData->assurances);
+				  $user->save();	
+				}  
 				echo '<html><body><script language="javascript">'; 
 				echo 'opener.location.href = "'.$this->home.'/index.php";';
 				echo 'window.close();';	
 				echo '</script></body></html>'; 
 			  } else {
-				  echo '<p>error in SSO login (3)</p>'; // error in joomla login process
-			  }	  
-		  } else {
-			  echo '<p>error in SSO login (2)</p>';  // not check User, not succes regist new user
-		  }
+				  echo '<p>error in SSO login (3) userid='.$userId.'</p>'; // error in joomla login process
+			  }
+		  }	  
 		} else {
 			echo '<p>error in SSO login (1)</p>'; // error in get userData from SSO server
 		}
 		echo '<center><br /><br /><a href="'.$this->home.'">goto home page</a><br /><br /></center>';
 	} // end doLogin function	
+	
+	/**
+	  * create joomla account task (miután a user kitöltötte a nick nevet a regist formon)
+	  * @return void
+	  * @param object $mainframe
+	  * @JREquest nick, ssoid, ssoemail, assurance
+	*/  
+	public function createJoomlaAccount($mainframe) {
+		$nick = JRequest::getVar('nick');
+		$ssoid = JRequest::getVar('ssoid');
+		$ssoemail = JRequest::getVar('ssoemail');
+		$assurance = JRequest::getVar('assurance');
+		$db = JFactory::getDBO();
+		if ($nick == '') {
+			$this->registForm($ssoid, $ssoemail, $assurance, 'Az álnév nem lehet üres');
+		} else {
+			$db->setQuery('select * from #__users where username = "'.$nick.'"');
+			$res = $db->loadObject();
+			if ($res == false ) {
+				$s = $this->registUser($ssoid, $nick, $ssoemail, $assurance);
+				if ($s != '') {
+					echo '<p>'.$s.'</p>';
+					return;
+				}
+				$userId = $this->checkUser($ssoid, $ssoemail);
+			    $user = $this->loginToJoomla($userId, $mainframe);
+				if ($user->id > 0) {
+				  echo '<html><body><script language="javascript">'; 
+				  echo 'opener.location.href = "'.$this->home.'/index.php";';
+				  echo 'window.close();';	
+				  echo '</script></body></html>'; 
+				}  else {
+				  echo '<p>Error in create new Joomla account.</p>';
+				  exit();	
+				}
+			} else {
+			  $this->registForm($ssoid, $ssoemail, $assurance, 'A '.$nick.' álnév már foglalt');
+			}
+		}
+	} 
 } // end sso_obj class
 
 // main program
@@ -257,6 +357,8 @@ $sso = new sso_obj();
 
 if (JRequest::getVar('code') != '') {
 	$sso->doLogin($mainframe);
+} else 	if (JRequest::getVar('nick') != '') {
+	$sso->createJoomlaAccount($mainframe);
 } else {
     $sso->loginForm();	
 }
