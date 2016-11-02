@@ -11,7 +11,7 @@ Szerző email: tibor.fogler@gmail.com
 Szerző web: adatmagus.hu
 Verzió: 2.00   2016.03.04
 
-A Joomla site-nak https: -el is elérhetőnek kell lennie.
+A Joomla rendszernek https: -el is elérhetőnek kell lennie.
 Ha a látogató belépet az ADA login képernyőn; akkor a Joomla rendszer kezdőlapra kerül.
 
 ADA login - Joomla integráció előkészítése
@@ -27,6 +27,7 @@ Telepítés
 =========
 1. Hozz létre a szervereden egy "{DOCUMENT_ROOT}/adalogin" könyvtárat
 2. Módositsd a jelen repo-ban lévő adalogin/index.php -file 'config' részét!
+   Megjegyzés: a PSW adatba egy tetszőlegesen választott, min 6 karakteres alfanumerikus jelszót irjál.
 3. Másold a filet a  szerverre {DOCUMENT_ROOT}/adalogin/index.php - néven.
 4. A web oldaladon helyezz el egy "Belépés" (login) linket ami a 
    {SITE_ROOT/adalogin/index.php} -ra mutat!
@@ -45,13 +46,16 @@ a Joomla rendszerben szerepelni fog.
 
 Az álnév megadása után a rendszer ellenörzi, hogy
 az álnév nem foglalt-e? Ha foglalt a felhasználó hibaüzenetet kap és új álnevet
-adhat meg. A megfelelő álnév megadása után létrejön egy joomla accout ahol a usernév
-a választott álnév, email cím pedig az "ADA email". Ézután a felhasználó ezzel az accounttal
+adhat meg. A megfelelő álnév megadása után létrejön egy "joomla felhasználói adat", ahol a usernév
+a választott álnév, email cím pedig az "ADA email". Ezután a felhasználó ezzel a "belépéssel"
 automatikusan beléptetődik a joomla rendszerbe, és a kezdő lapra kerül.
 
 A késöbbiekben az ADA rendszeren keresztüli bejelentkezés után a felhasználó
-ezzel az accounttal automatikusan beléptetődik a joomla rendszerbe és a kezdő 
+ezzel a "belépéssel" automatikusan beléptetődik a joomla rendszerbe és a kezdő 
 lapra kerül.
+
+A joomla admin felületen a generált felhasználói adat jogosultságai beállíthatóak.
+Alepértelmezetten az újonnan létrehozodd ADA belépési adatok a "Resgisztrált" csoport tagjai.
 
 Biztonsági figyelmeztetés
 =========================

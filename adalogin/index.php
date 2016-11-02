@@ -5,7 +5,7 @@
  * Szerző: Tibor Fogler 
  * Szerző email: tibor.fogler@gmail.com
  * Szerző web: adatmagus.hu
- * Verzió: 2.00   2016.03.04
+ * Verzió: 3.00   2016.09.17  
  *
  * Ennek a fájlnak a joomla root direktory alatt, adalogin aldirektoriban index.php néven kell lennie.
  * A szervernek https: -el is elérhetőnek kell lennie.
@@ -22,6 +22,9 @@
  * Módositsad ennek a fájlnak a "config" részét!
  * ============================================
  *
+ * Változás történet
+ * 2016.09.17  V 3.00
+ *   Cross Site Request Forgey attack (CSRF) védelem beépítése   
 */ 
 
 class ada_obj {
@@ -235,6 +238,7 @@ class ada_obj {
 		      <button type="submit">'.$this->OK.'</button>
 		    </p>
 		  </div>
+		  '.JHtml::_('form.token').'
 		</form>
 		'.$this->after_form.'
 		<center>
@@ -411,6 +415,7 @@ class ada_obj {
 		$adaid = JRequest::getVar('adaid');
 		$adaemail = JRequest::getVar('adaemail');
 		$assurance = JRequest::getVar('assurance');
+		Jsession::checkToken() or die('invalid CSRF protect token');
 		$db = JFactory::getDBO();
 		if ($nick == '') {
 			$this->registForm($adaid, $adaemail, $assurance, 'Az álnév nem lehet üres');
