@@ -1,0 +1,12 @@
+#!/bin/bash
+set -x
+rm -rf tmp
+mkdir -p tmp shippable
+export DISPLAY=:1
+Xvnc -SecurityTypes=None :1&
+echo 'sql-mode=""' >>/etc/mysql/mysql.conf.d/mysqld.cnf
+service mysql start
+export PATH=$PATH:/root/.composer/vendor/bin
+#joomla site:create -L root:password testsite
+chown -R www-data.www-data /var/www/testsite
+joomla --mysql-login=root:password database:install testsite
