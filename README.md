@@ -1,4 +1,4 @@
-# Joomla_oauth_plugin
+# Joomla_oauth_plugin7
 
 Joomla plugin for logging in with adatom.hu ADA service
 
@@ -9,10 +9,10 @@ Licensz: GNU/GPL
 Szerző: Tibor Fogler 
 Szerző email: tibor.fogler@gmail.com
 Szerző web: adatmagus.hu
-Verzió: 2.00   2016.03.04
+Verzió: 3.01   2016.11.07.
 
 A Joomla rendszernek https: -el is elérhetőnek kell lennie.
-Ha a látogató belépet az ADA login képernyőn; akkor a Joomla rendszer kezdőlapra kerül.
+Ha a látogató belépet az ADA login képernyőn; akkor a "redi" URL paraméterben megadott oldalra kerül.
 
 ADA login - Joomla integráció előkészítése
 ==========================================
@@ -25,12 +25,15 @@ Az ADA rendszer adminisztrátorától megkapod a következőket:
 
 Telepítés
 =========
-1. Hozz létre a szervereden egy "{DOCUMENT_ROOT}/adalogin" könyvtárat
-2. Módositsd a jelen repo-ban lévő adalogin/index.php -file 'config' részét!
+1. Másold be az "adalogin" könyvtárat a "{DOCUMENT_ROOT}" alá
+2. Módositsd a {DOCUMENT_ROOT}/adalogin/sso-config.php file-ban található beállításokat.
    Megjegyzés: a PSW adatba egy tetszőlegesen választott, min 6 karakteres alfanumerikus jelszót irjál.
-3. Másold a filet a  szerverre {DOCUMENT_ROOT}/adalogin/index.php - néven.
-4. A web oldaladon helyezz el egy "Belépés" (login) linket ami a 
-   {SITE_ROOT/adalogin/index.php} -ra mutat!
+3. A web oldaladon helyezz el egy "Belépés" (login) linket.
+   például: 
+   
+   <a href="<?php echo JURI::root().'adalogin/index.php?redi=base64_encode('http://valami.hu/kezdolap'); ?>">Belépés</a>
+   
+   sikeres login után a "redi" URL paraméterben megadott 'http://valami.hu/kezdolap'  fog megjelenni.
 
 Müködés
 =======
@@ -48,11 +51,12 @@ Az álnév megadása után a rendszer ellenörzi, hogy
 az álnév nem foglalt-e? Ha foglalt a felhasználó hibaüzenetet kap és új álnevet
 adhat meg. A megfelelő álnév megadása után létrejön egy "joomla felhasználói adat", ahol a usernév
 a választott álnév, email cím pedig az "ADA email". Ezután a felhasználó ezzel a "belépéssel"
-automatikusan beléptetődik a joomla rendszerbe, és a kezdő lapra kerül.
+automatikusan beléptetődik a joomla rendszerbe, és a "redi" lapra kerül.
 
 A késöbbiekben az ADA rendszeren keresztüli bejelentkezés után a felhasználó
-ezzel a "belépéssel" automatikusan beléptetődik a joomla rendszerbe és a kezdő 
-lapra kerül.
+ezzel a "belépéssel" automatikusan beléptetődik a joomla rendszerbe és a "redi" lapra kerül.
+
+
 
 A joomla admin felületen a generált felhasználói adat jogosultságai beállíthatóak.
 Alepértelmezetten az újonnan létrehozodd ADA belépési adatok a "Resgisztrált" csoport tagjai.

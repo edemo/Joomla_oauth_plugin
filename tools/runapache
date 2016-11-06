@@ -1,0 +1,7 @@
+#!/bin/bash
+cp -r $(pwd)/etc /tmp
+mkdir -p /tmp/joomlalog
+apache2 -X -f /tmp/etc/apache.conf&
+sleep 2
+tail -f /tmp/joomlalog/*&
+

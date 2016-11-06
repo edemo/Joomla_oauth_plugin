@@ -1,0 +1,20 @@
+#!/bin/bash
+set -x
+rm -rf tmp
+mkdir -p tmp shippable
+export DISPLAY=:1
+Xvnc -SecurityTypes=None :1&
+echo 'sql-mode=""' >>/etc/mysql/mysql.conf.d/mysqld.cnf
+service mysql start
+export PATH=$PATH:/root/.composer/vendor/bin
+#joomla site:create -L root:password testsite
+chown -R www-data.www-data /var/www/testsite
+joomla --mysql-login=root:password database:install testsite
+cp -r adalogin /var/www/testsite/
+sed -i s/adatom.hu/sso.edemokraciagep.org/ /var/www/testsite/adalogin/sso-config.php
+sed -i s/APP_ID_COMES_HERE/740a9102-d4e2-4988-96e4-d71b10dc8152/ /var/www/testsite/adalogin/sso-config.php
+sed -i s/APP_SECRET_COMES_HERE/j00ml4t3st/ /var/www/testsite/adalogin/sso-config.php
+sed -i s/PASSWORD_COMES_HERE/r4ndomP4ssword/ /var/www/testsite/adalogin/sso-config.php
+sed -i s/BASE_URL_COMES_HERE/localhost:8080/ /var/www/testsite/adalogin/sso-config.php
+cat /var/www/testsite/adalogin/sso-config.php 
+

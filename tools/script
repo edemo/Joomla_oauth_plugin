@@ -1,0 +1,9 @@
+#!/bin/bash
+make cleanup
+killall tail
+ls -la /root
+. tools/prepare
+tools/runapache
+make check
+make e2e
+
