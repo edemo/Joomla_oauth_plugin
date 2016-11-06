@@ -25,11 +25,10 @@ Az ADA rendszer adminisztrátorától megkapod a következőket:
 
 Telepítés
 =========
-1. Hozz létre a szervereden egy "{DOCUMENT_ROOT}/adalogin" könyvtárat
-2. Módositsd a jelen repo-ban lévő adalogin/index.php -file 'config' részét!
+1. Másold be az "adalogin" könyvtárat a "{DOCUMENT_ROOT}" alá
+2. Módositsd a {DOCUMENT_ROOT}/adalogin/sso-config.php file-ban található beállításokat.
    Megjegyzés: a PSW adatba egy tetszőlegesen választott, min 6 karakteres alfanumerikus jelszót irjál.
-3. Másold a filet a  szerverre {DOCUMENT_ROOT}/adalogin/index.php - néven.
-4. A web oldaladon helyezz el egy "Belépés" (login) linket ami a 
+3. A web oldaladon helyezz el egy "Belépés" (login) linket ami a 
    {SITE_ROOT/adalogin/index.php} -ra mutat!
 
 Müködés
