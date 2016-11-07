@@ -16,9 +16,9 @@ Ha a látogató belépet az ADA login képernyőn; akkor a Joomla rendszer kezd�
 
 ADA login - Joomla integráció előkészítése
 ==========================================
-Lépj kapcsolatba az ADA rendszer adminisztrátorával, megadandó adatok:
+Lépj kapcsolatba az ADA rendszer adminisztrátorával (info@adatom.hu), megadandó adatok:
    A Joomla rendszer domain neve (pl: li-de.tk)
-   Redirec link: https://yourdomain.hu/adalogin/index.php  (pl: https:/li-de.tk/adalogin/index.php)
+   Redirect link: https://yourdomain.hu/adalogin/index.php  (pl: https:/li-de.tk/adalogin/index.php)
 Az ADA rendszer adminisztrátorától megkapod a következőket:
    application key ($appkey)
    secret ($secret)
