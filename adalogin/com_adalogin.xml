@@ -62,4 +62,7 @@
             <language tag="hu-HU">language/hu-HU.com_adalogin.sys.ini</language>                           
 		</languages>		
 	</administration>
+	<updateservers>
+		<server type="extension" priority="2" name="com_adalogin Updates">https://github.com/edemo/Joomla_oauth_plugin/blob/master/extension.xml</server>
+	 </updateservers>	
 </extension>
