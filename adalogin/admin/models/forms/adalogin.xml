@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields>
+
+		<field
+			name="id"
+			type="hidden"
+			default="0"
+			required="true"
+			readonly="true"/>							
+															
+		<field
+			id="ADA_AUTH_URI"
+			name="ADA_AUTH_URI"
+			type="text"
+			required="true"
+			label="ADA_AUTH_URI"
+			description="ADA_AUTH_URI_Desc"
+			class="input-xxlarge"
+			size="120"/>						
+								
+														
+		<field
+			id="ADA_USER_URI"
+			name="ADA_USER_URI"
+			type="text"
+			required="true"
+			label="ADA_USER_URI"
+			description="ADA_USER_URI_Desc"
+			class="input-xxlarge"
+			size="120"/>						
+								
+														
+		<field
+			id="ADA_TOKEN_URI"
+			name="ADA_TOKEN_URI"
+			type="text"
+			required="true"
+			label="ADA_TOKEN_URI"
+			description="ADA_TOKEN_URI_Desc"
+			class="input-xxlarge"
+			size="120"/>						
+								
+														
+		<field
+			id="appkey"
+			name="appkey"
+			type="text"
+			required="true"
+			label="Appkey"
+			description="appkey_Desc"
+			class="input-xxlarge"
+			size="80"/>						
+								
+														
+		<field
+			id="secret"
+			name="secret"
+			type="text"
+			required="true"
+			label="Secret"
+			description="secret_Desc"
+			class="input-xxlarge"
+			size="80"/>						
+								
+														
+		<field
+			id="joomla_psw"
+			name="joomla_psw"
+			type="password"
+			required="false"
+			readonly="true"
+			label="Joomla_psw"
+			description="joomla_psw_Desc"
+			class="input-xxlarge"
+			size="80"/>						
+								
+								
+	</fields>	
+		
+</form>	
