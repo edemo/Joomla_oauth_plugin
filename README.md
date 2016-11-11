@@ -1,4 +1,4 @@
-# Joomla_oauth_plugin7
+# Joomla_oauth_plugin
 
 Joomla plugin for logging in with adatom.hu ADA service
 
@@ -7,6 +7,7 @@ IN ENGLISH
 
 Anonymous Digital Identification (ADA) system integration, Joomla 3.x
 =====================================================================
+see: https://adatom.hu/
 
 License: GNU / GPL
 Author: Tibor Fogler
@@ -77,6 +78,7 @@ MAGYAR
 
 Anonim Digitális Azonosítás (ADA) integráció joomla 3.x rendszerhez
 ===================================================================
+Lásd: https://adatom.hu
 
 Licensz: GNU/GPL
 Szerző: Tibor Fogler 
