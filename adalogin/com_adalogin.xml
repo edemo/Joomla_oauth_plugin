@@ -63,6 +63,6 @@
 		</languages>		
 	</administration>
 	<updateservers>
-		<server type="extension" priority="2" name="com_adalogin Updates">https://github.com/edemo/Joomla_oauth_plugin/blob/master/extension.xml</server>
+		<server type="extension" priority="2" name="com_adalogin Updates">https://github.com/edemo/Joomla_oauth_plugin/raw/master/extension.xml</server>
 	 </updateservers>	
 </extension>
