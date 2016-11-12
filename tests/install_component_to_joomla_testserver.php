@@ -25,7 +25,7 @@ jimport('joomla.plugin.helper');
 jimport('joomla.user.helper');
 $input = JFactory::getApplication()->input;
 
-$db->JFactory::getDBO();
+$db = JFactory::getDBO();
 $db->setQuery('
 INSERT INTO #__extensions
 (`extension_id`,`name`,`type`,`element`,`folder`,`client_id`,`enabled`,`access`,
