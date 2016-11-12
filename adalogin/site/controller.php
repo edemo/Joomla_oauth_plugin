@@ -41,6 +41,7 @@ class AdaloginController extends JControllerLegacy
 		parent :: __construct($config);
 		$input = JFactory::getApplication()->input;
 		$this->redi = $config['redi'];
+		if ($input->get('redi') != '') $this->redi = base64_decode($input->get('redi'));
 		if ($this->redi == '') $this->redi = JURI::base();
 		$input->set('view', $this->_viewname);
 	}
