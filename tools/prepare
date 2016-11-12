@@ -8,13 +8,12 @@ echo 'sql-mode=""' >>/etc/mysql/mysql.conf.d/mysqld.cnf
 service mysql start
 export PATH=$PATH:/root/.composer/vendor/bin
 #joomla site:create -L root:password testsite
-joomla --mysql-login=root:password database:install testsite
+joomla --mysql-login=root:password --mysql_db_prefix=test database:install testsite
 mkdir -p /var/www/testsite/components/com_adalogin
 mkdir -p /var/www/testsite/administrator/components/com_adalogin
 cp -r adalogin/site/* /var/www/testsite/components/com_adalogin
 cp -r adalogin/admin/* /var/www/testsite/administrator/components/com_adalogin/
 cp tests/install_component_to_joomla_testserver.php /var/www/testsite/
 chown -R www-data.www-data /var/www/testsite
-./tools/runapache 
-wget --no-check-certificate  https://localhost:8080/install_component_to_joomla_testserver.php
+mysql --password=password testtestsite <etc/init.sql
 
