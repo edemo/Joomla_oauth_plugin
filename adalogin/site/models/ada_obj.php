@@ -11,6 +11,7 @@
 class AdaloginModelAda_obj {
 	public $joomla_psw;
 
+	protected $controller;
 	protected $ADA_AUTH_URI; 
 	protected $ADA_USER_URI; 
 	protected $ADA_TOKEN_URI; 
@@ -19,11 +20,14 @@ class AdaloginModelAda_obj {
 	protected $myURI; 
 	protected $home;
 
-    function __construct($interface = "default") {
+    function __construct() {
+		$this->controller = $controller;
 		$db = JFactory::getDBO();
 		$db->setQuery('select * from #__adalogin order by id limit 1');
 		$res = $db->loadObject();
-		foreach ($res as $fn => $fv) $this->$fn = $fv;
+		foreach ($res as $fn => $fv) {
+			$this->$fn = $fv;
+		}	
 		$this->myURI = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$i = strpos($this->myURI,'?');
 		if ($i > 0) $this->myURI = substr($this->myURI,0,$i);
@@ -37,14 +41,14 @@ class AdaloginModelAda_obj {
 	/**
 	* redirect ADA server, get loginform. Call this method only in joomla component.controller
 	*/
-	public function loginform($redi) {
+	public function getLoginURI($redi) {
 	  $redirectURI = JURI::base().'components/com_adalogin/index.php';	
 	  // $redirectURI = JURI::base().'ssologin/index.php';	for old ssologin enviroment
 	  // $redirectURI = JURI::base().'adalogin/index.php';	for old adalogin enviroment
 	  $redirectURI = str_replace('http:','https:',$redirectURI);
 	  if ($redi != '') $redirectURI .= '?redi='.base64_encode($redi);
 	  $url = $this->ADA_AUTH_URI.'?response_type=code&client_id='.$this->appkey.'&redirect_uri='.urlencode($redirectURI);
-	  header('Location: '.$url);
+	  return $url;
 	}
 	
 	/**
@@ -67,8 +71,13 @@ class AdaloginModelAda_obj {
 				'content' => http_build_query($data)
 		    )
 		);
-		$context  = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);
+		if (_UNITTEST == 1) {
+		  $result = $remoteResults[$remoteIndex];		
+		  $remoteIndex++;
+		} else {
+		  $context  = stream_context_create($options);
+		  $result = file_get_contents($url, false, $context);
+		}
 		return $result;
 	}
 	

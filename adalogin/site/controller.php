@@ -63,7 +63,8 @@ class AdaloginController extends JControllerLegacy
 	*/
 	public function loginform() {
 	  $ada = new AdaloginModelAda_obj();	
-	  $ada->loginform($this->redi);
+	  $this->setRedirect($ada->getLoginURI($this->redi));
+	  $this->redirect();
 	}
 	
 	/**
