@@ -41,10 +41,10 @@ class AdaloginModelAda_obj {
 	/**
 	* redirect ADA server, get loginform. Call this method only in joomla component.controller
 	*/
-	public function getLoginURI($redi) {
+	public function getLoginURI($redi='') {
 	  $redirectURI = JURI::base().'components/com_adalogin/index.php';	
-	  // $redirectURI = JURI::base().'ssologin/index.php';	for old ssologin enviroment
-	  // $redirectURI = JURI::base().'adalogin/index.php';	for old adalogin enviroment
+	  // $redirectURI = JURI::base().'ssologin/index.php';	uncomment this line in old ssologin enviroment
+	  // $redirectURI = JURI::base().'adalogin/index.php';	uncomment this line in old adalogin enviroment
 	  $redirectURI = str_replace('http:','https:',$redirectURI);
 	  if ($redi != '') $redirectURI .= '?redi='.base64_encode($redi);
 	  $url = $this->ADA_AUTH_URI.'?response_type=code&client_id='.$this->appkey.'&redirect_uri='.urlencode($redirectURI);
