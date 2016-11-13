@@ -4,11 +4,13 @@ from UIProcedures import UIProcedures
 import os
 
 class LoginTest(TestCase, UIProcedures):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         profile_directory = os.path.join(os.path.dirname(__file__),"..", "etc", "firefox-profile")
         profile = webdriver.FirefoxProfile(profile_directory)
         profile.accept_untrusted_certs = True
-        self.driver = webdriver.Firefox(firefox_profile=profile)
+        cls.driver = webdriver.Firefox(firefox_profile=profile)
+        cls.installJoomlaComponent()
 
     def tearDown(self):
         self.driver.close()

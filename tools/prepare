@@ -8,12 +8,7 @@ echo 'sql-mode=""' >>/etc/mysql/mysql.conf.d/mysqld.cnf
 service mysql start
 export PATH=$PATH:/root/.composer/vendor/bin
 #joomla site:create -L root:password testsite
-chown -R www-data.www-data /var/www/testsite
 joomla --mysql-login=root:password database:install testsite
-mysql testsite -uroot -ppassword </etc/installComponent.sql
-mkdir -p /var/www/testsite/components/com_adalogin
-mkdir -p /var/www/testsite/administrator/components/com_adalogin
-cp -r adalogin/site /var/www/testsite/components/com_adalogin
-cp -r adalogin/admin /var/www/testsite/administrator/components/com_adalogin
-
+cp -r adalogin/* /var/www/testsite/tmp/
+chown -R www-data.www-data /var/www/testsite
 
