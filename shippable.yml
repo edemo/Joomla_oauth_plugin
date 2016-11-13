@@ -5,3 +5,10 @@ python:
 build:
   ci:
     - tools/script
+  on_failure:
+    - make cleanup
+    - rsync -e "ssh -p 22022" -ar shippable/ shippable@demokracia.rulez.org:/var/www/adadocs/joomla_oauth_plugin/$BUILD_NUMBER
+  on_success:
+    - make cleanup
+    - rsync -e "ssh -p 22022" -ar shippable/ shippable@demokracia.rulez.org:/var/www/adadocs/joomla_oauth_plugin/$BUILD_NUMBER
+
