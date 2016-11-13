@@ -3,17 +3,14 @@ from unittest.case import TestCase
 from UIProcedures import UIProcedures
 import os
 
-class LoginTest(TestCase, UIProcedures):
+class Initialize(UIProcedures):
     @classmethod
-    def setUpClass(cls):
+    def main(cls):
         profile_directory = os.path.join(os.path.dirname(__file__),"..", "etc", "firefox-profile")
         profile = webdriver.FirefoxProfile(profile_directory)
         profile.accept_untrusted_certs = True
         cls.driver = webdriver.Firefox(firefox_profile=profile)
+        cls.installJoomlaComponent()
+        cls.driver.close()
 
-    def tearDown(self):
-        self.driver.close()
-
-    def test_login(self):
-        self.loginWithSSO()
-
+Initialize.main()

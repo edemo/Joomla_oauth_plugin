@@ -14,8 +14,7 @@ class UIProcedures(UIActions):
         button.click()
         self.fillInField("nick", "Teszt Elek")
         self.click("submit")
-        self.waitUntilElementEnabled("content")
-        self.assertEqual("Hi Teszt Elek,", self.waitUntilElementEnabled("login-form").text)
+        self.wait_on_element_text(By.ID,'login-form', "Hi TesztElek,")
 
     @classmethod
     def installJoomlaComponent(cls):
