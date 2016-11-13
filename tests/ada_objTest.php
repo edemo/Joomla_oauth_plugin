@@ -1,6 +1,6 @@
 <?php
 require_once "testJoomlaFramework.php";
-require_once "adalogin/ada_obj.php";
+require_once "adalogin/site/models/ada_obj.php";
 
 class adaloginTest extends PHPUnit_Framework_TestCase
 {
