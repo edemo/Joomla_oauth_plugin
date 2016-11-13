@@ -2,7 +2,6 @@
 require_once "testJoomlaFramework.php";
 require_once "adalogin/site/models/ada_obj.php";
 
-
 class adaloginTest extends PHPUnit_Framework_TestCase {
     public function test_getLoginURI_correctly()  {
 	global $dbResults;
