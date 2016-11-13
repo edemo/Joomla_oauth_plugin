@@ -5,7 +5,7 @@ require_once "adalogin/site/models/ada_obj.php";
 class adaloginTest extends PHPUnit_Framework_TestCase
 {
     public function test_getLoginURI_correctly()  {
-		$dbResults[0] = JSON_encode('{
+		$dbResults[0] = JSON_decode('{
 		"id":1, 
 		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
 		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
