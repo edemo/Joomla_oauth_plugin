@@ -36,4 +36,3 @@ INSERT IGNORE INTO j_adalogin
 	"secret", 
 	ROUND(10000000 * RAND()) + 10000000
 	); 
-');
