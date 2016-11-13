@@ -25,8 +25,10 @@ class AdaloginModelAda_obj {
 		$db = JFactory::getDBO();
 		$db->setQuery('select * from #__adalogin order by id limit 1');
 		$res = $db->loadObject();
-		foreach ($res as $fn => $fv) {
+	    	if ($res) {
+		  foreach ($res as $fn => $fv) {
 			$this->$fn = $fv;
+		  }	
 		}	
 		$this->myURI = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$i = strpos($this->myURI,'?');
