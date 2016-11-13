@@ -3,7 +3,7 @@ INSERT INTO j_extensions
  `protected`,`manifest_cache`,`params`,`custom_data`,`system_data`,`checked_out`,
  `checked_out_time`,`ordering`,`state`) 
 VALUES 
-(0,"Adalogin","component","com_adalogin2","",1,1,0,0,
+(0,"Adalogin","component","com_adalogin","",1,1,0,0,
 "{\"name\":\"Adalogin\",\"type\":\"component\",\"creationDate\":\"2016-11-08\",\"author\":\"Fogler Tibor\",\"copyright\":\"Copyright (C) 2016 Fogler Tibor Open Source Matters. All rights reserved.\",\"authorEmail\":\"tibor.fogler@gmail.com\",\"authorUrl\":\"http:\\/\\/adatmagus.hu\",\"version\":\"4.00\",\"description\":\"login into joomla use adataom.hu user authorization service.\",\"group\":\"\",\"filename\":\"com_adalogin\"}",
 "{}","","",0,"0000-00-00 00:00:00",0,0);
 
