@@ -2,6 +2,7 @@
 /**
 * test framwork for joomla components unit test
 */
+error_reporting(E_ALL & ~E_NOTICE);
 define( '_JEXEC', 1 );
 define( '_UNITTEST', 1 );
 define( 'DS', DIRECTORY_SEPARATOR );
@@ -51,23 +52,23 @@ global $input;
 
 
 class JFactory {
-	public function getApplication() {
+	public static function getApplication() {
 		global $application;
 		return $appliacation;
 	}
-	public function getDocument() {
+	public static  function getDocument() {
 		global $document;
 		return $document;
 	}
-	public function getUser() {
+	public static  function getUser() {
 		global $application;
 		return $appliacation;
 	}
-	public function getLanguage() {
+	public static  function getLanguage() {
 		global $language;
 		return $language;
 	}
-	public function getDBO() {
+	public static  function getDBO() {
 		global $database;
 		return $database;
 	}
@@ -75,7 +76,7 @@ class JFactory {
 class JApplication {
 	public $input;
     function __construct() {
-		$this->input = $input;
+		$this->input = new JInput();
 	}	
 }
 class JDocument {
@@ -98,7 +99,7 @@ class JInput {
 	}
 }
 class JRequest {
-	public function getValue($name, $default='', $dataType='') {
+	public  static function getValue($name, $default='', $dataType='') {
 		global $inputs;
 		if (isset($inputs[$name])) 
 			$result = $inputs[$name];
@@ -106,32 +107,32 @@ class JRequest {
 			$result = $default;
 		return $result;
 	}
-	public function getWord($name, $default='', $dataType='') {
+	public  static function getWord($name, $default='', $dataType='') {
 		return $this->getValue($name, $default, $dataType);
 	}
-	public function getCmd($name, $default='', $dataType='') {
+	public  static function getCmd($name, $default='', $dataType='') {
 		return $this->getValue($name, $default, $dataType);
 	}
-	public function setValue($name,$value,$dataType) {
+	public  static function setValue($name,$value,$dataType) {
 		global $inputs;
 		$inputs[$name] = $value;
 	}
 }
 class JURI {
-	public function base() {
+	public  static function base() {
 		return 'http://localhost/';
 	}
-	public function root() {
+	public  static function root() {
 		return 'http://localhost/';
 	}
 }
 class JText {
-	public function _($token) {
+	public  static function _($token) {
 		return $token;
 	}
 }
 class JHTML {
-	public function _($token) {
+	public  static function _($token) {
 		return '<span>'.$token.'</span>';
 	}
 }
