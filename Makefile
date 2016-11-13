@@ -7,8 +7,12 @@ testenv:
 check:
 	phpunit --stderr tests
 
-e2e:	recording
+e2e:	installcomponent
 	PYTHONPAT=end2endtest python3 -m unittest discover -v -f -s end2endtest -p "*.py"
+
+installcomponent:	recording
+	python3 end2endtest/initialize.py
+	touch installcomponent
 
 cleanup: stoprecording
 	mv /tmp/joomlalog/* shippable
