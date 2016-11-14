@@ -1,32 +1,24 @@
 <?php
+require_once "testJoomlaFramework.php";
+require_once "adalogin/site/models/ada_obj.php";
 
-
-require_once "adalogin/ada_obj.php";
-
-class FakeInterface {
-
-    public $mock_data = array();
-
-    public function _construct() {
-        $this->mock_data["headers"] = array();
-    }
-
-    public function header($header) {
-        $this->mock_data["headers"][] = $header;
-    }
-}
-
-class adaloginTest extends PHPUnit_Framework_TestCase
-{
-
-    public function test_loginForm_sets_the_Location_header_correctly()
-    {
-        $fake = new FakeInterface();
-        $ada = new ada_obj($fake);
-        $resp = $ada->loginForm();
+class adaloginTest extends PHPUnit_Framework_TestCase {
+    public function test_getLoginURI_correctly()  {
+	global $dbResults;
+	$dbResults[0] = JSON_decode('{
+	"id":1, 
+	"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
+	"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
+	"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
+	"appkey":"APP_ID_COMES_HERE", 
+	"secret":"secret_comes_here", 
+	"joomla_psw":"joomla_psw_comes_here"
+	}');
+        $ada = new adaloginModelAda_obj();
+        $resp = $ada->getloginURI();
         $this->assertEquals(
-            "Location: https://adatom.hu/ada/v1/oauth2/auth?response_type=code&client_id=APP_ID_COMES_HERE&redirect_uri=https%3A%2F%2FBASE_URL_COMES_HERE%2Fadalogin%2Findex.php",
-            $fake->mock_data["headers"][0]);
+           "https://adatom.hu/ada/v1/oauth2/auth?response_type=code&client_id=APP_ID_COMES_HERE&redirect_uri=https%3A%2F%2Flocalhost%2Fcomponents%2Fcom_adalogin%2Findex.php",
+           $resp);
     }
-
 }
+?>
