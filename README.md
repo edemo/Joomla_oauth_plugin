@@ -93,7 +93,7 @@ ADA login - Joomla integráció előkészítése
 ==========================================
 Lépj kapcsolatba az ADA rendszer adminisztrátorával (info@adatom.hu), megadandó adatok:
    A Joomla rendszer domain neve (pl: li-de.tk)
-   Redirec link: https://yourdomain.hu/components/com_adalogin/index.php  
+   Redirect link: https://yourdomain.hu/components/com_adalogin/index.php  
 Az ADA rendszer adminisztrátorától megkapod a következőket:
    application key (appkey)
    secret (secret)
@@ -143,14 +143,4 @@ Biztonsági figyelmeztetés
 Az "appkey", "secret", "psw" adatok
 bizalmasan kezelendőek, azok illetéktelen kezekbe kerülése lehetőséget adhat a 
 joomla rendszerbe történő illegális belépésre.
-
-
-
-
-
-
-
-
-
-
 
