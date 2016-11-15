@@ -39,7 +39,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		$testData->addRemoteResult('{"userid":1,"useremail":"proba@proba.hu","assurances":"[magyar]"}');
 		$ada = new adaloginModelAda_obj();
         $ada->callback();
-		$this->expertOutputRegex('/submit/');
+		$this->expercOutputRegex('/submit/');
     }
 	public function test_callback_error() {
 		global $testData;
@@ -56,7 +56,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		$testData->addRemoteResult('{"error":0121}');
 		$ada = new adaloginModelAda_obj();
         $ada->callback();
-		$this->expertOutputRegex('/error/');
+		$this->expectOutputRegex('/error/');
     }
 }
 ?>
