@@ -40,7 +40,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$testData->setInput('redi','');
         $controller = new AdaloginController();
         $controller->dologin();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
     public function test_dologin_user_exists()  {
 		global $testData,$componentName;
@@ -113,7 +113,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
         $controller = new AdaloginController();
         $controller->processform();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
     public function test_processform_nick_used()  {
 		global $testData,$componentName;
@@ -135,7 +135,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
         $controller = new AdaloginController();
         $controller->processform();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
 	
 }
