@@ -7,7 +7,7 @@ define( '_JEXEC', 1 );
 define( '_UNITTEST', 1 );
 define( 'DS', DIRECTORY_SEPARATOR );
 define('JPATH_BASE', 'adalogin');
-define('JPATH_COMPONENT', 'adalogin/site');
+define('JPATH_ROOT', 'adalogin');
 define('JPATH_ADMINISTRATOR', 'adalogin/admin');
 
 class testDataClass {
@@ -36,6 +36,9 @@ class testDataClass {
 	protected $remoteIndex;
 		
 	function __construct() {
+		$this->clear();
+	}
+	public function clear() {
 		$this->inputs = array();
 		$this->dbResults = array();
 		$this->dbErrorNum = 0;
@@ -81,6 +84,7 @@ class testDataClass {
 global $_SERVER;
 global $testData;
 global $componentName;
+global $viewName;
 
 global $testApplication;
 global $testDocument;
@@ -127,6 +131,12 @@ class JApplication {
     function __construct() {
 		$this->input = new JInput();
 	}
+	public function getUserStateFromRequest($name, $default='',$dataType='') {
+		return $default;
+	}	
+	public function getCfg($name, $default='') {
+		return $default;
+	}
 public function login($credentials) {
 	return true;
 }	
@@ -157,7 +167,7 @@ class JRequest {
 	public  static function getCmd($name, $default='', $dataType='') {
 		return $this->getVar($name, $default, $dataType);
 	}
-	public  static function setValue($name,$value,$dataType) {
+	public  static function setVar($name,$value,$dataType='') {
 		global $testData;
 		$testData->setInput($name,$value);
 	}
@@ -236,20 +246,37 @@ class JLanguage {
 	
 }
 class JTable {
-	
+	protected $tableName;
+	public function bind($data) {
+		
+	}
+	public function getTableName() {
+		return $this->tableName;
+	}
+	public function setError($str) {
+		
+	}
+	public function getError() {
+		
+	}
 }
 class JControllerLegacy {
 	protected $redirectURI = '';
-	
-	function __construct($config) {}
-	public function getView($viewName = 'default',$viewType='html') {
-		global $componentName;
+
+	function __construct($config='') {}
+	public function getView($aviewName = 'default',$viewType='html') {
+		global $componentName, $viewName;
+		$viewName = $aviewName;
 		require_once (JPATH_COMPONENT.DS.'views'.DS.$viewName.DS.'view.'.$viewType.'.php');
 		$viewClassName = $componentName.'View'.ucfirst($viewName);
 		return new $viewClassName ();
 	}
-	public function getModel($modelName = 'default') {
-		global $componentName;
+	public function getModel($modelName = '') {
+		global $componentName,$viewName;
+		if (!isset($this->_viewname)) $this->_viewname = '';
+		if (($modelName == '') & ($this->_viewname != '')) $modelName = $this->_viewname;
+		if (($modelName == '') & ($viewName != '')) $modelName = $viewName;
+		$viewName = $modelName;
 		require_once (JPATH_COMPONENT.DS.'models'.DS.$modelName.'.php');
 		$modelClassName = $componentName.'Model'.ucfirst($modelName);
 		return new $modelClassName ();
@@ -262,15 +289,41 @@ class JControllerLegacy {
         $testData->mock_data["redirectURI"] = $this->redirectURI;
 		$testData->mock_data["redirectMsg"] = $message;
 	}
+	public function edit() {
+		echo 'joomla default edit task';
+	}
+	public function add() {
+		echo 'joomla default add task';
+	}
+	public function save() {
+		echo 'joomla default save task';
+	}
+	public function remove() {
+		echo 'joomla default remove task';
+	}
+	public function browse() {
+		echo 'joomla default browse task';
+	}
+	public function setMessage($msg) {
+		
+	}
 }
 class JModelLegacy {
+	public $_db;
+	function __construct($config='') {
+		$this->_db = new JDatabase();
+	}
 	public function set($name,$value) {
 		$this->$name = $value;
 	}
-	public function getTable($tableName) {
-		
+	public function getTable($tableName = '') {
+		return new JTable();
 	}
-	public function getQuerySql() {
+	public function getName() {
+		global $viewName;
+		return $viewName;
+	}
+	public function getQuery() {
 		
 	}
 	public function getTotal() {
@@ -285,7 +338,7 @@ class JModelLegacy {
 	public function save($data) {
 		
 	}
-	public function delete($data) {
+	public function remove($data) {
 		
 	}
 	public function check($data) {
@@ -300,9 +353,16 @@ class JModelLegacy {
 	public function getError() {
 		
 	}
+	public function setState($name,$value) {
+		
+	}
+	public function getState($name, $default='') {
+		return $default;
+	}
 }
 class JViewLegacy {
 	protected $layout;
+	function __construct($config='') {}
 	public function set($name,$value) {
 		$this->$name = $value;
 	}
@@ -310,10 +370,15 @@ class JViewLegacy {
 		$this->layout = $str;
 	}
 	public function display($tmp) {
+		global $viewName;
+		$tmp = $this->layout.$tmp;
+		if ($tmp == '') $tmp = 'default';
+		
 		if ($this->layout != '')
 		  echo 'testJoomlaFramwork view.display '.$this->layout.'_'.$tmp.'<br>';
 		else	
 		  echo 'testJoomlaFramwork view.display '.$tmp.'<br>';
+		include JPATH_COMPONENT.DS.'views'.DS.$viewName.DS.'tmpl'.DS.$tmp.'.php';
 	}
 	public function setModel($model) {
 		$this->model = $model;

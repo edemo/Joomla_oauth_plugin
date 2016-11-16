@@ -50,7 +50,7 @@ class AdaloginModelAdalogin  extends AdaloginModel {
 	 */
 	public function store($data)
 	{
-		$row =& $this->getTable();
+		$row = $this->getTable();
 		/**
 		 * Example: get text from editor 
 		 * $Text  = JRequest::getVar( 'text', '', 'post', 'string', JREQUEST_ALLOWRAW );

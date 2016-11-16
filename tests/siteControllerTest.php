@@ -1,11 +1,12 @@
 <?php
 require_once "tests/testJoomlaFramework.php";
+define('JPATH_COMPONENT', 'adalogin/site');
 require_once "adalogin/site/controller.php";
 
 class adaloginControllerTest extends PHPUnit_Framework_TestCase {
-
-    public function test_loginform()  {
+    protected function setupConfig() {
 		global $testData,$componentName;
+		$testData->clear();
 		$componentName = 'Adalogin';
 		$testData->addDbResult(JSON_decode('{
 		"id":1, 
@@ -16,6 +17,11 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		"secret":"secret_comes_here", 
 		"joomla_psw":"joomla_psw_comes_here"
 		}'));
+	}
+
+    public function test_loginform()  {
+		global $testData,$componentName;
+		$this->setupConfig();
         $controller = new AdaloginController();
         $controller->loginform();
         $this->assertEquals(
@@ -24,36 +30,19 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
     }
     public function test_dologin_new_user()  {
 		global $testData,$componentName;
-		$componentName = 'Adalogin';
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
-		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
-		"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
-		"appkey":"APP_ID_COMES_HERE", 
-		"secret":"secret_comes_here", 
-		"joomla_psw":"joomla_psw_comes_here"
-		}'));
+		$this->setupConfig();
+		$testData->addDbResult(false);
 	    $testData->setInput('adaid',123);
 		$testData->setInput('adaemail','test@test.hu');
 		$testData->setInput('assurance','["magyar"]');
 		$testData->setInput('redi','');
         $controller = new AdaloginController();
         $controller->dologin();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
     public function test_dologin_user_exists()  {
 		global $testData,$componentName;
-		$componentName = 'Adalogin';
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
-		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
-		"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
-		"appkey":"APP_ID_COMES_HERE", 
-		"secret":"secret_comes_here", 
-		"joomla_psw":"joomla_psw_comes_here"
-		}'));
+		$this->setupConfig();
 		$testData->addDbResult(JSON_decode('{
 		"id":1, 
 		"username":"testElek" 
@@ -70,16 +59,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
     } 
     public function test_processform_ok()  {
 		global $testData,$componentName;
-		$componentName = 'Adalogin';
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
-		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
-		"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
-		"appkey":"APP_ID_COMES_HERE", 
-		"secret":"secret_comes_here", 
-		"joomla_psw":"joomla_psw_comes_here"
-		}'));
+		$this->setupConfig();
 		$testData->addDbResult(false);
 		
 	    $testData->setInput('adaid',123);
@@ -95,16 +75,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
     } 
     public function test_processform_nick_empty()  {
 		global $testData,$componentName;
-		$componentName = 'Adalogin';
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
-		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
-		"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
-		"appkey":"APP_ID_COMES_HERE", 
-		"secret":"secret_comes_here", 
-		"joomla_psw":"joomla_psw_comes_here"
-		}'));
+		$this->setupConfig();
 		$testData->addDbResult(false);
 	    $testData->setInput('adaid',123);
 		$testData->setInput('adaemail','test@test.hu');
@@ -113,20 +84,11 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
         $controller = new AdaloginController();
         $controller->processform();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
     public function test_processform_nick_used()  {
 		global $testData,$componentName;
-		$componentName = 'Adalogin';
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 
-		"ADA_USER_URI":"https://adatom.hu/ada/v1/users/me", 
-		"ADA_TOKEN_URI":"https://adatom.hu/ada/v1/oauth2/token", 
-		"appkey":"APP_ID_COMES_HERE", 
-		"secret":"secret_comes_here", 
-		"joomla_psw":"joomla_psw_comes_here"
-		}'));
+		$this->setupConfig();
 		$testData->addDbResult(JSON_encode('{"id":2,"username":"testElek"}'));
 	    $testData->setInput('adaid',123);
 		$testData->setInput('adaemail','test@test.hu');
@@ -135,7 +97,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
         $controller = new AdaloginController();
         $controller->processform();
-		$this->expertOutputRegex('/testJoomlaFramwork view\.display regist/');   
+		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
     } 
 	
 }
