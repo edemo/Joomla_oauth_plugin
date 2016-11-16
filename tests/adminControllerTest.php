@@ -13,6 +13,7 @@ class adaloginControllerAdaloginTest extends PHPUnit_Framework_TestCase {
 		global $testData,$componentName;
 		$testData->clear();
 		$componentName = 'Adalogin';
+		$viewName = 'adalogin';
 		$testData->addDbResult(JSON_decode('{
 		"id":1, 
 		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 

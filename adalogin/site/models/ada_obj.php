@@ -11,7 +11,6 @@
 class AdaloginModelAda_obj {
 	public $joomla_psw;
 
-	protected $controller;
 	protected $ADA_AUTH_URI; 
 	protected $ADA_USER_URI; 
 	protected $ADA_TOKEN_URI; 
@@ -21,7 +20,6 @@ class AdaloginModelAda_obj {
 	protected $home;
 
     function __construct() {
-		$this->controller = $controller;
 		$db = JFactory::getDBO();
 		$db->setQuery('select * from #__adalogin order by id limit 1');
 		$res = $db->loadObject();

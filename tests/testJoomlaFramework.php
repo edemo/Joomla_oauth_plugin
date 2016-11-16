@@ -264,9 +264,10 @@ class JControllerLegacy {
 	protected $redirectURI = '';
 
 	function __construct($config='') {}
-	public function getView($aviewName = 'default',$viewType='html') {
+	public function getView($aviewName = '',$viewType='html') {
 		global $componentName, $viewName;
-		$viewName = $aviewName;
+		if ($aviewName != '') 
+			$viewName = $aviewName;
 		require_once (JPATH_COMPONENT.DS.'views'.DS.$viewName.DS.'view.'.$viewType.'.php');
 		$viewClassName = $componentName.'View'.ucfirst($viewName);
 		return new $viewClassName ();
@@ -277,8 +278,13 @@ class JControllerLegacy {
 		if (($modelName == '') & ($this->_viewname != '')) $modelName = $this->_viewname;
 		if (($modelName == '') & ($viewName != '')) $modelName = $viewName;
 		$viewName = $modelName;
-		require_once (JPATH_COMPONENT.DS.'models'.DS.$modelName.'.php');
-		$modelClassName = $componentName.'Model'.ucfirst($modelName);
+		if (file_exists(JPATH_COMPONENT.DS.'models'.DS.$modelName.'.php')) {
+			require_once (JPATH_COMPONENT.DS.'models'.DS.$modelName.'.php');
+			$modelClassName = $componentName.'Model'.ucfirst($modelName);
+		} else {
+			require_once (JPATH_COMPONENT.DS.'models'.DS.'model.php');
+			$modelClassName = $componentName.'Model';
+		}	
 		return new $modelClassName ();
 	}
 	public function setRedirect($uri) {
@@ -335,7 +341,7 @@ class JModelLegacy {
 	public function getItem($id=0) {
 		
 	}
-	public function save($data) {
+	public function store($data) {
 		
 	}
 	public function remove($data) {
@@ -404,5 +410,6 @@ function jimport($str) {}
 $_SERVER['HTTP_SITE'] = 'localhost';
 $_SERVER['REQUEST_URI'] = 'index.php';
 $componentName = 'testComponent';
+$viewName = 'testView';
 $testData = new testDataClass();
 ?> 
