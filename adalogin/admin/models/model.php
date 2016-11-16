@@ -265,8 +265,8 @@ class AdaloginModel  extends JModelLegacy {
 	 * @return $item array
 	 */
 	
-	public function getItem() 
-	{			
+	public function getItem($id=0) 
+	{	if ($id > 0) $this->_id = $id;		
 		$item = & $this->getTable();				
 		$item->load($this->_id);
 		if (isset($item->params)) {					

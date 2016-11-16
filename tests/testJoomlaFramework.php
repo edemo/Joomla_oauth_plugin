@@ -332,7 +332,7 @@ class JModelLegacy {
 	public function getItems() {
 		
 	}
-	public function getItem($id) {
+	public function getItem($id=0) {
 		
 	}
 	public function save($data) {

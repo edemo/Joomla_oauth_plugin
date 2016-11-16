@@ -1,7 +1,7 @@
 <?php
 require_once "tests/testJoomlaFramework.php";
-require_once "adalogin/site/models/ada_obj.php";
 define('JPATH_COMPONENT', 'adalogin/site');
+require_once "adalogin/site/models/ada_obj.php";
 
 class adaloginTest extends PHPUnit_Framework_TestCase {
     protected function setupConfig() {
@@ -37,11 +37,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		$testData->addRemoteResult('{"userid":1,"useremail":"proba@proba.hu","assurances":"[magyar]"}');
 		$ada = new adaloginModelAda_obj();
         $ada->callback();
-<<<<<<< HEAD
 		$this->expectOutputRegex('/submit/');
-=======
-		$this->expercOutputRegex('/submit/');
->>>>>>> c17075442633772de8d48759dc7f2e7f54fdf2ac
     }
 	public function test_callback_error() {
 		global $testData;
