@@ -90,7 +90,7 @@ class AdaloginModel  extends JModelLegacy {
 	{
 		parent::__construct();
 		
-		$app = &JFactory::getApplication('administrator');
+		$app = JFactory::getApplication('administrator');
 			// Guess the option from the class name (Option)Model(View).
 		if (empty($this->option)) {
 			$r = null;

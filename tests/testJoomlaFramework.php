@@ -316,6 +316,7 @@ class JControllerLegacy {
 }
 class JModelLegacy {
 	public $_db;
+	protected $errorMsg;
 	function __construct($config='') {
 		$this->_db = new JDatabase();
 	}
@@ -354,10 +355,10 @@ class JModelLegacy {
 		
 	}
 	public function setError($str) {
-		
+		$this->errorMsg = $str;
 	}
 	public function getError() {
-		
+		return $this->errorMsg;
 	}
 	public function setState($name,$value) {
 		

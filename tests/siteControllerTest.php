@@ -1,14 +1,17 @@
 <?php
 require_once "tests/testJoomlaFramework.php";
-define('JPATH_COMPONENT', 'adalogin/site');
-require_once "adalogin/site/controller.php";
 
 class adaloginControllerTest extends PHPUnit_Framework_TestCase {
-    protected function setupConfig() {
-		global $testData,$componentName;
-		$testData->clear();
+    function __construct() {
+		global $testData,$componentName,$viewName;
 		$componentName = 'Adalogin';
 		$viewName = 'adalogin';
+		define('JPATH_COMPONENT', 'adalogin/site');
+		require_once "adalogin/site/controller.php";
+	}
+	protected function setupConfig() {
+		global $testData,$componentName;
+		$testData->clear();
 		$testData->addDbResult(JSON_decode('{
 		"id":1, 
 		"ADA_AUTH_URI":"https://adatom.hu/ada/v1/oauth2/auth", 

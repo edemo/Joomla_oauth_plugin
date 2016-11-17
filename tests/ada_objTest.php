@@ -1,9 +1,14 @@
 <?php
 require_once "tests/testJoomlaFramework.php";
-define('JPATH_COMPONENT', 'adalogin/site');
-require_once "adalogin/site/models/ada_obj.php";
 
 class adaloginTest extends PHPUnit_Framework_TestCase {
+	function __construct() {
+		global $testData,$componentName,$viewName;
+		define('JPATH_COMPONENT', 'adalogin/site');
+		$componentName = 'adalogin';
+		$viewName = 'adalogin';
+		require_once "adalogin/site/models/ada_obj.php";
+	}
     protected function setupConfig() {
 		global $testData,$componentName;
 		$testData->clear();

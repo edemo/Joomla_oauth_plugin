@@ -3,12 +3,14 @@
 * admini/controllers/adalogin.php test
 */
 require_once "tests/testJoomlaFramework.php";
-define('JPATH_COMPONENT', 'adalogin/admin');
-require_once "adalogin/admin/controller.php";
-require_once "adalogin/admin/controllers/adalogin.php";
-require_once "adalogin/admin/models/model.php";
 
 class adaloginControllerAdaloginTest extends PHPUnit_Framework_TestCase {
+	function __construct() {
+		define('JPATH_COMPONENT', 'adalogin/admin');
+		require_once "adalogin/admin/controller.php";
+		require_once "adalogin/admin/controllers/adalogin.php";
+		require_once "adalogin/admin/models/model.php";
+	}
     protected function setupConfig() {
 		global $testData,$componentName;
 		$testData->clear();
