@@ -5,7 +5,8 @@ testenv:
 	docker run --rm -p 5901:5901 -v $$(pwd):/joomla_oauth_plugin -it magwas/wp_oauth_plugin /bin/bash
 
 check:
-	phpunit --stderr tests
+	phpunit --stderr tests/site
+	phpunit -sstderr tests/admin
 
 e2e:	installcomponent
 	PYTHONPAT=end2endtest python3 -m unittest discover -v -f -s end2endtest -p "*.py"
