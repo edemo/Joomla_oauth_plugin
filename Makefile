@@ -6,7 +6,7 @@ testenv:
 
 check:
 	phpunit --stderr tests/site
-	phpunit -sstderr tests/admin
+	phpunit --stderr tests/admin
 
 e2e:	installcomponent
 	PYTHONPAT=end2endtest python3 -m unittest discover -v -f -s end2endtest -p "*.py"
