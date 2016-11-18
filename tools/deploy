@@ -1,0 +1,6 @@
+#!/bin/bash
+set -xe
+mkdir -p target
+cat  extension.xml |sed "s<BRANCH<${BRANCH}<g;s<BUILD<${BUILD_NUMBER}<g" >target/extension.xml
+cd  adalogin
+zip -ro ../target/adalogin_${BRANCH}_${BUILD_NUMBER}.zip *

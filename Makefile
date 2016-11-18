@@ -18,6 +18,9 @@ cleanup: stoprecording
 	mv /tmp/joomlalog/* shippable
 	rm -rf tmp/
 
+deploy:
+	./tools/deploy
+
 recording:
 	start-stop-daemon --start --background --oknodo --name flvrec --make-pidfile --pidfile /tmp/flvrec.pid --startas /usr/bin/python -- /usr/local/bin/flvrec.py -o /tmp/joomlalog/record.flv :1
 

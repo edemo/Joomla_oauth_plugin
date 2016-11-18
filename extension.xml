@@ -2,7 +2,7 @@
 <jedupdate version="1">
 	<!-- valid links only or leave blank -->
 	<homepage_link>https://github.com/edemo/Joomla_oauth_plugin</homepage_link>
-	<download_link>https://github.com/edemo/Joomla_oauth_plugin/raw/master/com_adalogin_4.00.zip</download_link>
+	<download_link>http://adadocs.demokracia.rulez.org/joomla_oauth_plugin/BRANCH/com_adalogin_BRANCH_BUILD.zip</download_link>
 	<demo_link></demo_link>
 	<documentation_link>https://github.com/edemo/Joomla_oauth_plugin/blob/master/README.md</documentation_link>
 	<support_link>https://github.com/edemo/Joomla_oauth_plugin/issues</support_link>
