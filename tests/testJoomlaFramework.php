@@ -369,9 +369,6 @@ class JModelLegacy {
 	public function getPagination() {
 		return new JPagination();
 	}
-	public function save($item} {
-		
-	}
 }
 class JViewLegacy {
 	protected $layout;
