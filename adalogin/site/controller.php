@@ -84,16 +84,15 @@ class AdaloginController extends JControllerLegacy
 	*/
     public function dologin() {
 		$input = JFactory::getApplication()->input;
-		JSession::checkToken() or die( 'Invalid Token' );		
 		$adaid = $input->get('adaid');
 		$adaemail = $input->get('adaemail','','string');
 	    $assurance = $input->get('assurance','','string');
 		$redi = base64_decode($input->get('redi','','string'));
 		if ($redi == '') $redi = JURI::base();
-		$document = JFactory::getDocument();
-		$viewType = $document->getType();
-		$view = $this->getView($this->_viewname,$viewType);
-		$model = $this->getModel($this->_mainmodel);
+		$document =& JFactory::getDocument();
+		$viewType	= $document->getType();
+		$view = & $this->getView($this->_viewname,$viewType);
+		$model = & $this->getModel($this->_mainmodel);
 	    $ada = new AdaloginModelAda_obj();	
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
@@ -120,7 +119,6 @@ class AdaloginController extends JControllerLegacy
 	* process registform  adaid, adaemail, nick, assurance, redi , CSRF_token data from components/com_adalogin/index.php
 	*/
 	public function processform() {
-		JSession::checkToken() or die( 'Invalid Token' );		
 		$input = JFactory::getApplication()->input;
 		$adaid = $input->get('adaid');
 		$adaemail = $input->get('adaemail','','string');
@@ -128,15 +126,15 @@ class AdaloginController extends JControllerLegacy
 		$redi = base64_decode($input->get('redi','','string'));
 		if ($redi == '') $redi = JURI::base();	
 	    $nick = $input->get('nick');
-		$document = JFactory::getDocument();
-		$viewType = $document->getType();
-		$view = $this->getView($this->_viewname,$viewType);
-		$model = $this->getModel($this->_mainmodel);
+		$document =& JFactory::getDocument();
+		$viewType	= $document->getType();
+		$view = & $this->getView($this->_viewname,$viewType);
+		$model = & $this->getModel($this->_mainmodel);
 	    $ada = new AdaloginModelAda_obj();	
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		if ($model->checkNewNick($nick)) {
-			if ($model->userSave($adaid, $nick, $adaemail, $assurance)) {
+			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
 				// login to joomla 
 				if ($model->loginToJoomla($adaid, $adaemail)) {
 					// goto $redi

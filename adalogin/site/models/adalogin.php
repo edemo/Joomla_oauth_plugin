@@ -85,7 +85,7 @@ class AdaloginModelAdalogin extends JModelLegacy  {
   * @param JSON_encoded assurance
   * @return boolean and set errorMsg  
   */
-  public function userSave($adaid, $nick, $adaemail, $assurance) {
+  public function save($adaid, $nick, $adaemail, $assurance) {
 	$result = true;
 	$data = array(
           "name"=>$nick,
