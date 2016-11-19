@@ -8,10 +8,31 @@
 */ 
 
 
+class JoomlaInterface {
+	public function remoteCall($url,$method,$data,$extraHeader='') {
+		$result = '';
+		if ($extraHeader != '') {
+			$extraHeader .= "\r\n";
+		}	
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
+				'method'=> $method,
+				'content' => http_build_query($data)
+		    )
+		);
+		$context  = stream_context_create($options);
+		return file_get_contents($url, false, $context);
+		return $result;
+	}
+}
+
+global $theJoomlaInterface;
+$theJoomlaInterface = new JoomlaInterface();
+
 class AdaloginModelAda_obj {
 	public $joomla_psw;
 
-	protected $controller;
 	protected $ADA_AUTH_URI; 
 	protected $ADA_USER_URI; 
 	protected $ADA_TOKEN_URI; 
@@ -19,16 +40,21 @@ class AdaloginModelAda_obj {
 	protected $secret; 
 	protected $myURI; 
 	protected $home;
+	protected $interface;
 
-    function __construct() {
-		$this->controller = $controller;
+    function __construct($iface = false) {
+        global $theJoomlaInterface;
+		if($iface)
+		{
+			$this->interface = $iface;
+		} else {
+			$this->interface = $theJoomlaInterface;
+        }
 		$db = JFactory::getDBO();
 		$db->setQuery('select * from #__adalogin order by id limit 1');
 		$res = $db->loadObject();
-	    	if ($res) {
-		  foreach ($res as $fn => $fv) {
+		foreach ($res as $fn => $fv) {
 			$this->$fn = $fv;
-		  }	
 		}	
 		$this->myURI = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$i = strpos($this->myURI,'?');
@@ -62,25 +88,7 @@ class AdaloginModelAda_obj {
 	  * @return string
 	*/
 	public function remoteCall($url,$method,$data,$extraHeader='') {
-		$result = '';
-		if ($extraHeader != '') {
-			$extraHeader .= "\r\n";
-		}	
-		$options = array(
-			'http' => array(
-				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
-				'method'=> $method,
-				'content' => http_build_query($data)
-		    )
-		);
-		if (_UNITTEST == 1) {
-		  $result = $remoteResults[$remoteIndex];		
-		  $remoteIndex++;
-		} else {
-		  $context  = stream_context_create($options);
-		  $result = file_get_contents($url, false, $context);
-		}
-		return $result;
+        return $this->interface->remoteCall($url,$method,$data,$extraHeader);
 	}
 	
 	/**
