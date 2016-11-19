@@ -9,7 +9,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		$viewName = 'adalogin';
 		require_once "adalogin/site/models/ada_obj.php";
 	}
-    protected function setupConfig() {
+    protected function setUp() {
 		global $testData,$componentName;
 		$testData->clear();
 		$componentName = 'Adalogin';
@@ -22,12 +22,11 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		"secret":"secret_comes_here", 
 		"joomla_psw":"joomla_psw_comes_here"
 		}'));
-	}
+		$this->ada = new adaloginModelAda_obj($testData);
+    }
     public function test_getLoginURI_correctly()  {
 		global $testData;
-		$this->setupConfig();
-        $ada = new adaloginModelAda_obj();
-        $resp = $ada->getloginURI();
+        $resp = $this->ada->getloginURI();
         $this->assertEquals(
             "https://adatom.hu/ada/v1/oauth2/auth?response_type=code&client_id=APP_ID_COMES_HERE&redirect_uri=https%3A%2F%2Flocalhost%2Fcomponents%2Fcom_adalogin%2Findex.php",
             $resp);
@@ -35,22 +34,76 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		// $this->expertOutputString('várt'); // hiba ha ez nem szerepel az outputba
 		// $this->expertOutputRegex('várt'); // hiba ha ez illeszkedik az outputra
     }
-	public function test_callback_correctly() {
+	private function setupTestDataForCorrectCall() {
 		global $testData;
-		$this->setupConfig();
 		$testData->addRemoteResult('{"access_token":123,"other":456}');
 		$testData->addRemoteResult('{"userid":1,"useremail":"proba@proba.hu","assurances":"[magyar]"}');
-		$ada = new adaloginModelAda_obj();
-        $ada->callback();
+	}
+    public function test_callback_correctly() {
+		$this->setupTestDataForCorrectCall ();
+        $this->ada->callback();
 		$this->expectOutputRegex('/submit/');
     }
+    public function test_callback_calls_correct_uri() {
+		global $testData;
+		$this->setupTestDataForCorrectCall();
+        $this->ada->callback();
+        $this->assertEquals(
+        		"https://adatom.hu/ada/v1/users/me",
+        		$testData->gotArgs["url"]
+        );
+    }
+    public function test_callback_uses_correct_method() {
+    	global $testData;
+    	$this->setupTestDataForCorrectCall();
+    	$this->ada->callback();
+    	$this->assertEquals(
+    			"GET",
+    			$testData->gotArgs["method"]
+    			);
+    }
+    public function test_callback_sends_authorization_header() {
+    	global $testData;
+    	$this->setupTestDataForCorrectCall();
+    	$this->ada->callback();
+    	$this->assertEquals(
+    			"Authorization: Bearer 123",
+    			$testData->gotArgs["extraHeader"]
+    			);
+    }
+    
+    public function test_callback_uses_correct_data() {
+    	global $testData;
+    	$this->setupTestDataForCorrectCall();
+    	$this->ada->callback();
+    	$this->assertEquals(
+    			30,
+    			$testData->gotArgs["data"]["timeout"] );
+    	$this->assertEquals(
+    			10,
+    			$testData->gotArgs["data"]["redirection"] );
+    	$this->assertEquals(
+    			1.0,
+    			$testData->gotArgs["data"]["httpversion"] );
+    	$this->assertEquals(
+    			true,
+    			$testData->gotArgs["data"]["blocking"] );
+    	$this->assertEquals(
+    			array(),
+    			$testData->gotArgs["data"]["cookies"] );
+    	$this->assertEquals(
+    			"yes",
+    			$testData->gotArgs["data"]["sslverify"] );
+    	$this->assertEquals(
+    			30,
+    			$testData->gotArgs["data"]["timeout"] );
+    }
+    
 	public function test_callback_error() {
 		global $testData;
-		$this->setupConfig();
 		$testData->addRemoteResult('{"access_token":123,"other":456}');
 		$testData->addRemoteResult('{"error":0121}');
-		$ada = new adaloginModelAda_obj();
-        $ada->callback();
+        $this->ada->callback();
 		$this->expectOutputRegex('/error/');
     }
 }
