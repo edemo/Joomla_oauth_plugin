@@ -43,7 +43,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
 		"joomla_psw":"joomla_psw_comes_here"
 		}'));
 		$testData->addRemoteResult('{"access_token":123,"other":456}');
-		$testData->addRemoteResult('{"userid":1,"useremail":"proba@proba.hu","assurances":"[magyar]"}');
+		$testData->addRemoteResult('{"userid":1,"email":"proba@proba.hu","assurances":"[magyar]"}');
 	}
     public function test_callback_correctly() {
 		$this->setupTestDataForCorrectCall ();
