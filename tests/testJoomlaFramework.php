@@ -58,8 +58,7 @@ class testDataClass {
 		$this->remoteResults[] = $value;
 	}
 
-    function remoteCall($url,$method,$data,$extraHeader)
-    {
+    function remoteCall($url,$method,$data,$extraHeader) {
         $this->gotArgs["url"] = $url;
         $this->gotArgs["method"] = $method;
         $this->gotArgs["data"] = $data;
@@ -206,7 +205,7 @@ class JDatabase {
 		
 	}
 	public function getQuery() {
-		return '';
+		return new JDatabaseQuery();
 	}
 	public function loadObjectList() {
 		global $testData;
@@ -230,6 +229,76 @@ class JDatabase {
 		else
 			return '"'.$str.'"';
 	}
+}
+
+class JDatabaseQuery {
+/*
+__call
+__clone
+__construct
+__get
+__toString
+andWhere
+call
+castAsChar
+charLength
+clear
+columns
+concatenate
+currentTimestamp
+dateAdd
+dateFormat
+day
+delete
+dump
+e
+escape
+exec
+extendWhere
+format
+group
+having
+hour
+innerJoin
+insert
+join
+leftJoin
+length
+minute
+month
+nullDate
+orWhere
+outerJoin
+q
+qn
+quote
+quoteName
+rightJoin
+second
+set
+setQuery
+union
+unionAll
+unionDistinct
+update
+values
+year	
+*/
+	public function select($str) {
+		
+	}
+	public function from($str) {
+		
+	}
+	public function where($str) {
+		
+	}
+	public function order($str) {
+		
+	}
+	public function __toString() {
+		return '';
+	}	
 }
 
 class JUser {
@@ -334,36 +403,25 @@ class JModelLegacy {
 	public function set($name,$value) {
 		$this->$name = $value;
 	}
-	public function getTable($tableName = '') {
-		return new JTable();
-	}
-	public function getName() {
-		global $viewName;
-		return $viewName;
-	}
-	public function getQuery() {
+	public function addIncludePath($str='') {
 		
 	}
-	public function getTotal() {
+	public function addTablePath($str='') {
 		
 	}
-	public function getItems() {
+    public function def($property, $default = null) {
+	   if (isset($this->property) == false) $this->$property = $default;
+	   return $this->$property; 	
+	}
+	public function get($property, $default = null) {
+	   if (isset($this->property) == false) 
+		   return $default;
+	   else 
+	       return $this->$property; 	
 		
 	}
-	public function getItem($id=0) {
-		
-	}
-	public function store($data) {
-		
-	}
-	public function remove($data) {
-		
-	}
-	public function check($data) {
-		
-	}
-	public function canDelete($id=0) {
-		
+	public function getDbo() {
+		return $this->_db;
 	}
 	public function setError($str) {
 		$this->errorMsg = $str;
@@ -371,14 +429,50 @@ class JModelLegacy {
 	public function getError() {
 		return $this->errorMsg;
 	}
+	public function getErrors() {
+		return array();
+	}
+	public function getInstance() {
+		return null;
+	}
+	public function getName() {
+		global $viewName;
+		return $viewName;
+	}
+	public function getProperties() {
+		return array();
+	}
 	public function setState($name,$value) {
 		
 	}
 	public function getState($name, $default='') {
 		return $default;
 	}
-	public function getPagination() {
-		return new JPagination();
+	public function getTable($tableName = '') {
+		return new JTable();
+	}
+	public function loadHistory($version, $table) {
+		return true;
+	}
+	public function setDbo($db) {
+		$this->_db = $db;
+	}
+	public function setProperties($properties) {
+		return true;
+	}
+	protected function getListCount($query) {
+		return 0;
+	}
+}
+class JModelList extends JModelLegacy {	
+	public function getQuery() {
+		return new $JQuery();
+	}
+	public function getTotal() {
+		return 0;	
+	}
+	public function getItems() {
+		return array();
 	}
 }
 class JViewLegacy {
@@ -419,6 +513,9 @@ class JSession {
 }
 
 class JPagination {
+  function __construct($total, $limitstart, $limit) {
+	  
+  }
   public function getListFooter() {
 	  return 'pagination';
   }

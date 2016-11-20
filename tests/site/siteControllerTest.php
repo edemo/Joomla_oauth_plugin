@@ -8,6 +8,7 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		$viewName = 'adalogin';
 		define('JPATH_COMPONENT', 'adalogin/site');
 		require_once "adalogin/site/controller.php";
+		parent::__construct();
 	}
 	protected function setupConfig() {
 		global $testData,$componentName;

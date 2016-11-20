@@ -8,6 +8,7 @@
 */ 
 
 
+
 class JoomlaInterface {
 	public function remoteCall($url,$method,$data,$extraHeader='') {
 		$result = '';
@@ -149,7 +150,6 @@ class AdaloginModelAda_obj {
 	public function callback() {
 		$input = JFactory::getApplication()->input;
 		$db = JFactory::getDBO();
-
 		$token = $this->getADAtoken($input->get('code'));
 		// get user data
 		if (isset($token->access_token)) {
