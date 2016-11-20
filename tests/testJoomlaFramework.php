@@ -4,13 +4,13 @@
 */
 error_reporting(E_ALL & ~E_NOTICE);
 define( '_JEXEC', 1 );
-define( '_UNITTEST', 1 );
 define( 'DS', DIRECTORY_SEPARATOR );
 define('JPATH_BASE', 'adalogin');
 define('JPATH_ROOT', 'adalogin');
 define('JPATH_ADMINISTRATOR', 'adalogin/admin');
 
 class testDataClass {
+
 	/**
 	* set input parameters for test
 	* $inputs['name1'] = 'value1', $inputs['name2'] = 'value2', .... 
@@ -28,6 +28,7 @@ class testDataClass {
 	protected $dbErrorMsg;
 	protected $dbIndex;
 
+    public $gotArgs = array();
 	public $mock_data = array();
 	/**
 	* set remoteCall results for test
@@ -56,6 +57,16 @@ class testDataClass {
 	function addRemoteResult($value) {
 		$this->remoteResults[] = $value;
 	}
+
+    function remoteCall($url,$method,$data,$extraHeader)
+    {
+        $this->gotArgs["url"] = $url;
+        $this->gotArgs["method"] = $method;
+        $this->gotArgs["data"] = $data;
+        $this->gotArgs["extraHeader"] = $extraHeader;
+        return $this->getRemoteResult();
+    }
+
 	public function getDbResult() {
 		if ($this->dbIndex < count($this->dbResults))
 		   $result = $this->dbResults[$this->dbIndex];
@@ -351,7 +362,7 @@ class JModelLegacy {
 	public function check($data) {
 		
 	}
-	public function canDelete($data) {
+	public function canDelete($id=0) {
 		
 	}
 	public function setError($str) {
@@ -365,6 +376,9 @@ class JModelLegacy {
 	}
 	public function getState($name, $default='') {
 		return $default;
+	}
+	public function getPagination() {
+		return new JPagination();
 	}
 }
 class JViewLegacy {
@@ -404,6 +418,11 @@ class JSession {
 	}
 }
 
+class JPagination {
+  public function getListFooter() {
+	  return 'pagination';
+  }
+}
 // global functions
 function jimport($str) {}
 
