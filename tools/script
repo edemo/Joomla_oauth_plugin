@@ -1,7 +1,9 @@
 #!/bin/bash
+set -x
 make cleanup
 killall tail
 ls -la /root
+set -e
 . tools/prepare
 tools/runapache
 make check
