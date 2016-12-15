@@ -107,6 +107,7 @@ class adaloginTest extends PHPUnit_Framework_TestCase {
     
 	public function test_callback_error() {
 		global $testData;
+		$testData->clear();
 		$testData->addRemoteResult('{"access_token":123,"other":456}');
 		$testData->addRemoteResult('{"error":0121}');
         $this->ada->callback();

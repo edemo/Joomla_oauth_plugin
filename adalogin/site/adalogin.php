@@ -6,7 +6,6 @@
 * @license #GNU/GPL
  */
 
-//--No direct access
 defined('_JEXEC') or die('=;)');
 // DS has removed from J 3.0
 if(!defined('DS')) {

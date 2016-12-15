@@ -28,7 +28,7 @@ class testDataClass {
 	protected $dbErrorMsg;
 	protected $dbIndex;
 
-    public $gotArgs = array();
+    	public $gotArgs = array();
 	public $mock_data = array();
 	/**
 	* set remoteCall results for test
@@ -124,7 +124,7 @@ class JFactory {
 		global $testUser;
 		if (!isset($testUser)) $testUser = new JUser();
 		$testUser->id = $id;
-		$testUser->username='testElek';
+		$testUser->username='guest';
 		return $testUser;
 	}
 	public static  function getLanguage() {
@@ -138,7 +138,7 @@ class JFactory {
 }
 class JApplication {
 	public $input;
-    function __construct() {
+	    function __construct() {
 		$this->input = new JInput();
 	}
 	public function getUserStateFromRequest($name, $default='',$dataType='') {
@@ -147,9 +147,19 @@ class JApplication {
 	public function getCfg($name, $default='') {
 		return $default;
 	}
-public function login($credentials) {
-	return true;
-}	
+	public function login($credentials) {
+		global $testUser;
+		$testUser->id = 1;
+		$testUser->username='testElek';
+		$testUser->name='Test Elek';
+		return true;
+	}	
+	public function logout() {
+		global $testUser;
+		$testUser->id=0;
+		$testUser->username = 'guest';
+		$testUser->name = '';
+	}
 }
 class JDocument {
 	public function getType() {
@@ -374,6 +384,7 @@ class JControllerLegacy {
 		global $testData;
         $testData->mock_data["redirectURI"] = $this->redirectURI;
 		$testData->mock_data["redirectMsg"] = $message;
+		echo 'redirect:'.$this->redirectURI.' message='.$message."\n";
 	}
 	public function edit() {
 		echo 'joomla default edit task';

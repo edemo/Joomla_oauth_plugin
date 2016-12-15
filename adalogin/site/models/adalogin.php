@@ -5,6 +5,8 @@
 * @subpackage 	Models
 * @copyright	Copyright (C) 2016, Fogler Tibor. All rights reserved.
 * @license #GNU/GPL
+*
+* 2016.12.15 V4.01 extradata kezelés támogatása, újabb joomla psw kezelési eljárás
 */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
@@ -44,7 +46,7 @@ class AdaloginModelAdalogin extends JModelLegacy  {
 	  if ($res) {
 		$result = JFactory::getUser($res->id);
 	  } else {
-		$db->setQuery('select * from #__users where params like "{%\"ADA\":\"'.$db->quote($adaid).'\"%"');
+		$db->setQuery('select * from #__users where params like "{%\"ADA\":\"'.$adaid.'\"%"');
 		$res = $db->loadObject();
 		if ($res) {
 		  $result = JFactory::getUser($res->id);
@@ -83,21 +85,35 @@ class AdaloginModelAdalogin extends JModelLegacy  {
   * @param string nick
   * @param string adaemail
   * @param JSON_encoded assurance
+  * @param string extradata    (2016.12.15 update)
   * @return boolean and set errorMsg  
   */
-  public function save($adaid, $nick, $adaemail, $assurance) {
+  public function save($adaid, $nick, $adaemail, $assurance, $extrafields=array()) {
 	$result = true;
+	$db = JFactory::getDBO();
+	$params = new stdClass();
+	$params->ADA = $adaid;
+	$params->ASSURANCE = $assurance;
+	$psw = md5($adaid.$this->PSW);
 	$data = array(
           "name"=>$nick,
           "username"=>$nick,
-          "password"=>$this->PSW,
-          "password2"=>$this->PSW,
-		  "params"=>JSON_decode('{"ADA":"'.$adaid.'","ASSURANCE":"'.$assurance.'"}'),
+          "password"=>$psw,
+          "password2"=>$psw,
+		  "params"=>$params,
 		  "activation"=>"",
           "email"=>$adaemail,
           "block"=>0,
           "groups"=>array("1","2")
     );
+	if (isset($extrafields['name'])) {
+		if ($extrafields['name'] != '')
+			$data['name'] = $extrafields['name'];
+	}	
+	if (isset($extrafields['email'])) {
+		if ($extrafields['email'] != '')
+			$data['email'] = $extrafields['email'];
+	}
     $user = new JUser();
     if(!$user->bind($data)) {
 		  $result = false;
@@ -106,7 +122,15 @@ class AdaloginModelAdalogin extends JModelLegacy  {
     if (!$user->save()) {
 		  $result = false;
           $this->setError(JText::_('ADALOGIN_ERROR').' '. $user->getError());
-    }
+    } else {
+		// save data to user_profile
+		foreach ($extrafields as $fn => $fv) {
+			if (($fn != 'name') & ($fn != 'email')) {
+				$db->setQuery('insert into #__user_profiles values ('.$user->id.',"profile.'.$fn.'","'.$fv.'",0)');
+				$db->query();
+			}
+		}
+	}
 	return $result;	
   }
 
@@ -119,11 +143,21 @@ class AdaloginModelAdalogin extends JModelLegacy  {
   public function loginToJoomla($adaid, $adaemail) {
     $user = $this->getUser($adaid, $adaemail); 
 	$credentials = array();
+	
+	//1. próba az újabb (V4.01) eljárás szerinti psw -al
 	$credentials['username'] = $user->username;
-	$credentials['password'] = $this->PSW;
+	$credentials['password'] = md5($adaid.$this->PSW);
 	$user->id = 0; 
 	$result = JFactory::getApplication()->login($credentials);
-	if ($result == false) $this->setError('Error in Joomla login');
+	if ($result == false) {
+		//2. próba a régi psw eljárással
+		$credentials['username'] = $user->username;
+		$credentials['password'] = $this->PSW;
+		$result = JFactory::getApplication()->login($credentials);
+	}
+	if ($result == false) {
+	  $this->setError('Error in Joomla login');
+	}  
 	return $result;
   }	  
   

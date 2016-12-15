@@ -7,6 +7,7 @@
 * @license #GNU/GPL
 *
 * ADA authoraze service integarttion
+* 2016.12.15 extradata kezelés. a registform -on "extrafields[filename]" nevü extra mezők lehetnek.
 */
 
 // no direct access
@@ -116,7 +117,8 @@ class AdaloginController extends JControllerLegacy
 	}	// dologin
 	
 	/**
-	* process registform  adaid, adaemail, nick, assurance, redi , CSRF_token data from components/com_adalogin/index.php
+	* process registform  adaid, adaemail, nick, assurance, redi , extrafields(array), CSRF_token data 
+	* from from. caller: components/com_adalogin/index.php
 	*/
 	public function processform() {
 		$input = JFactory::getApplication()->input;
@@ -126,6 +128,7 @@ class AdaloginController extends JControllerLegacy
 		$redi = base64_decode($input->get('redi','','string'));
 		if ($redi == '') $redi = JURI::base();	
 	    $nick = $input->get('nick');
+		$extrafields = $input->get('extrafields',array(),'array');
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
@@ -134,7 +137,7 @@ class AdaloginController extends JControllerLegacy
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		if ($model->checkNewNick($nick)) {
-			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
+			if ($model->save($adaid, $nick, $adaemail, $assurance, $extrafields)) {
 				// login to joomla 
 				if ($model->loginToJoomla($adaid, $adaemail)) {
 					// goto $redi
@@ -152,5 +155,36 @@ class AdaloginController extends JControllerLegacy
 			$this->displayRegistForm($view, $adaid, $adaemail, $assurance, $redi);
 		}
 	} // processform
+	
+	/**
+	* logout  - task  loogout from joomla and from ADA
+	*/
+	public function logout() {
+		$app = JFactory::getApplication();
+		$app->logout();		
+		$view = $this->getView($this->_viewname,'html');
+		$view->setLayout('logout');
+		$view->display();
+	}
+	
+	/**
+	* Kilépés az ADA rendszerböl
+	*/
+	public function adalogout() {
+		$extraHeader .= "\r\n";
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
+				'method'=> 'post',
+				'content' => ''
+		    )
+		);
+		$context  = stream_context_create($options);
+		$result = file_get_contents('https://adatom.hu/v1/logout', false, $context);
+		$view = $this->getView($this->_viewname,'html');
+		$view->setLayout('adalogout');
+		$view->display();
+	}
+	
 }// class
 ?>
