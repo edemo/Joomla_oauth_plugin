@@ -161,8 +161,8 @@ class AdaloginModelAda_obj {
 		}
 		//$this->home = str_replace('https:','http:',$this->home); //uncomment if https: not supported
 //+ TEST		
-		$userData = JSON_decode('{"userid":25,"email":"25@adatom.hu"}');	
-		$this->home = 'http://robitc/valasztoimozgalom/index.php';
+//		$userData = JSON_decode('{"userid":25,"email":"25@adatom.hu"}');	
+//		$this->home = 'http://robitc/valasztoimozgalom/index.php';
 //- TEST		
 	
 		if (isset($userData->userid)) {
