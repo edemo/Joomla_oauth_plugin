@@ -37,6 +37,8 @@ class testDataClass {
 	protected $remoteIndex;
 		
 	function __construct() {
+		global $testUser;
+		$testUser = new JUser();
 		$this->clear();
 	}
 	public function clear() {
