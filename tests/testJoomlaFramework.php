@@ -138,7 +138,7 @@ class JFactory {
 }
 class JApplication {
 	public $input;
-    function __construct() {
+    	function __construct() {
 		$this->input = new JInput();
 	}
 	public function getUserStateFromRequest($name, $default='',$dataType='') {
@@ -147,9 +147,12 @@ class JApplication {
 	public function getCfg($name, $default='') {
 		return $default;
 	}
-public function login($credentials) {
-	return true;
-}	
+	public function login($credentials) {
+		return true;
+	}	
+	public function logout() {
+		return true
+	}
 }
 class JDocument {
 	public function getType() {
