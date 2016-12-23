@@ -16,7 +16,7 @@ class testDataClass {
 	* $inputs['name1'] = 'value1', $inputs['name2'] = 'value2', .... 
 	*/
 	protected $inputs;
-•••••••••
+
 	/**
 	* set Database result, and errorNum, errorMsg for test
 	* $dbResults[0] = JSON_encode('{'field1":"value1", "field2":"value2"}'); 
