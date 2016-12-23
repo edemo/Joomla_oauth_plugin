@@ -16,7 +16,7 @@ class testDataClass {
 	* $inputs['name1'] = 'value1', $inputs['name2'] = 'value2', .... 
 	*/
 	protected $inputs;
-
+•••••••••
 	/**
 	* set Database result, and errorNum, errorMsg for test
 	* $dbResults[0] = JSON_encode('{'field1":"value1", "field2":"value2"}'); 
@@ -37,8 +37,8 @@ class testDataClass {
 	protected $remoteIndex;
 		
 	function __construct() {
-		$this->clear();
-	}
+		$this->clear();•••••••••
+	}•••••••••
 	public function clear() {
 		$this->inputs = array();
 		$this->dbResults = array();
@@ -62,7 +62,7 @@ class testDataClass {
         $this->gotArgs["url"] = $url;
         $this->gotArgs["method"] = $method;
         $this->gotArgs["data"] = $data;
-        $this->gotArgs["extraHeader"] = $extraHeader;
+        $this->gotArgs["extraHeader"] = $extraHeader;•••••••••
         return $this->getRemoteResult();
     }
 
@@ -84,7 +84,7 @@ class testDataClass {
 	}
 	public function getInput($name,$default='') {
 		if (isset($this->inputs[$name]))
-		  $result = $this->inputs[$name];
+		  $result = $this->inputs[$name];•••••••••
 	    else
 		  $result = $default;
 		return $result;
@@ -106,7 +106,7 @@ global $testUser;
 
 /**
 * set component name for test (without 'com_')
-*/
+*/•••••••••
 $componentName = 'valami';
 
 class JFactory {
@@ -131,7 +131,7 @@ class JFactory {
 		return new JLanguage();
 	}
 	public static  function getDBO() {
-		global $testDatabase;
+		global $testDatabase;•••••••••
 		if (!isset($testDatabase)) $testDatabase = new JDatabase();
 		return $testDatabase;
 	}
@@ -151,11 +151,11 @@ class JApplication {
 		return true;
 	}	
 	public function logout() {
-		return true
+		return true;
 	}
 }
 class JDocument {
-	public function getType() {
+	public function getType() {•••••••••
 		return 'html';
 	}
 }
@@ -178,7 +178,7 @@ class JRequest {
 		return $this->getVar($name, $default, $dataType);
 	}
 	public  static function getCmd($name, $default='', $dataType='') {
-		return $this->getVar($name, $default, $dataType);
+		return $this->getVar($name, $default,••••••••• $dataType);
 	}
 	public  static function setVar($name,$value,$dataType='') {
 		global $testData;
