@@ -317,6 +317,7 @@ class JUser {
 	public $id = 0;
 	public $username = '';
 	public $name = '';
+        public $groups = array();
 	public function save() {
 		return true;
 	}
@@ -531,6 +532,14 @@ class JPagination {
   }
   public function getListFooter() {
 	  return 'pagination';
+  }
+}
+class UsersModelGroup {
+  public function save($data) {
+    return true;
+  }
+  public function getItem($id) {
+    return false;
   }
 }
 // global functions
