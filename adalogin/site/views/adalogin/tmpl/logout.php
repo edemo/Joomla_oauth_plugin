@@ -5,7 +5,7 @@
 		  <p> </p>
 		  <p> </p>
 		  <p>
-		    <a href="<?php echo JURI::base();?>'index.php?option=com_adalogin&task=adalogout" id="adalogout">
+		    <a href="https://adatom.hu">
   			  <?php echo JText::_('ADALOGIN_ADALOGOUT'); ?>
 			</a>
 		  </p>

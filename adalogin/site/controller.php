@@ -99,10 +99,7 @@ class AdaloginController extends JControllerLegacy
 		$view->setModel($model,true);
 		$user = $model->getUser($adaid, $adaemail);
 		if ($user->id > 0) {
-			if ($assurance != $user->getParam('ASSURANCE')) {
-				$user->setParam('ASSURANCE',$assurance);
-				$user->save();
-			}
+			$model->setUserAssurances($user, $assurance);
 			// login to joomla 
 			if ($model->loginToJoomla($adaid, $adaemail)) {
 				// goto $redi
@@ -140,6 +137,8 @@ class AdaloginController extends JControllerLegacy
 			if ($model->save($adaid, $nick, $adaemail, $assurance, $extrafields)) {
 				// login to joomla 
 				if ($model->loginToJoomla($adaid, $adaemail)) {
+					$user = JFactory::getUser();
+					$model->setUserAssurances($user, $assurance);
 					// goto $redi
 					$this->setRedirect($redi);
 					$this->redirect();
@@ -171,16 +170,10 @@ class AdaloginController extends JControllerLegacy
 	* Kilépés az ADA rendszerböl
 	*/
 	public function adalogout() {
-		$extraHeader .= "\r\n";
-		$options = array(
-			'http' => array(
-				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
-				'method'=> 'post',
-				'content' => ''
-		    )
-		);
-		$context  = stream_context_create($options);
-		$result = file_get_contents('https://adatom.hu/v1/logout', false, $context);
+		echo '<div style="display:block">
+		<iframe name="adalogoutfrm" height="100" width="100" src="https://adatom.hu/v1/logout"></iframe>
+		</div>
+		';
 		$view = $this->getView($this->_viewname,'html');
 		$view->setLayout('adalogout');
 		$view->display();

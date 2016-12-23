@@ -150,7 +150,6 @@ class AdaloginModelAda_obj {
 		$input = JFactory::getApplication()->input;
 		$db = JFactory::getDBO();
 		$userData = null;
-
 		$token = $this->getADAtoken($input->get('code'));
 		// get user data
 		if (isset($token->access_token)) {
@@ -160,10 +159,7 @@ class AdaloginModelAda_obj {
 			$userData->assurances = JSON_encode($userData->assurances);
 		}
 		//$this->home = str_replace('https:','http:',$this->home); //uncomment if https: not supported
-//+ TEST		
-//		$userData = JSON_decode('{"userid":25,"email":"25@adatom.hu"}');	
-//		$this->home = 'http://robitc/valasztoimozgalom/index.php';
-//- TEST		
+		$userData = JSON_decode('{"userid":30,"email":"30@adatom.hu"}');	
 	
 		if (isset($userData->userid)) {
 			echo '<html>
