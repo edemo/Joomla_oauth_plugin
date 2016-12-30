@@ -18,7 +18,7 @@ require_once (JPATH_COMPONENT.DS.'models'.DS.'ada_obj.php');
 /**
  * Variant Controller
  *
- * @package    
+ * @package
  * @subpackage Controllers
  */
 class AdaloginController extends JControllerLegacy
@@ -27,11 +27,11 @@ class AdaloginController extends JControllerLegacy
 	protected $_viewname = 'adalogin';
 	protected $_mainmodel = 'adalogin';
 	protected $_context = "com_adalogin";
-	protected $ADA_AUTH_URI; 
-	protected $ADA_USER_URI; 
-	protected $ADA_TOKEN_URI; 
-	protected $appkey; 
-	protected $secret; 
+	protected $ADA_AUTH_URI;
+	protected $ADA_USER_URI;
+	protected $ADA_TOKEN_URI;
+	protected $appkey;
+	protected $secret;
 	protected $joomla_psw;
 
 	/**
@@ -50,11 +50,11 @@ class AdaloginController extends JControllerLegacy
 	* only techical. Joomla MVC requed
 	*/
 	public function display() {
-		$document =& JFactory::getDocument();
-		$viewType	= $document->getType();
-		$view = & $this->getView($this->_viewname,$viewType);
-		$model = & $this->getModel($this->_mainmodel);
-		$view->setModel($model,true);		
+		$document = &JFactory::getDocument();
+		$viewType = $document->getType();
+		$view = &$this->getView($this->_viewname,$viewType);
+		$model = &$this->getModel($this->_mainmodel);
+		$view->setModel($model,true);
 		$view->display();
 	}
 
@@ -62,11 +62,11 @@ class AdaloginController extends JControllerLegacy
 	* default task, redirect ADA server: get loginform
 	*/
 	public function loginform() {
-	  $ada = new AdaloginModelAda_obj();	
+	  $ada = new AdaloginModelAda_obj();
 	  $this->setRedirect($ada->getLoginURI($this->redi));
 	  $this->redirect();
 	}
-	
+
 	/**
 	* display ada_user_regist form
 	*/
@@ -78,7 +78,7 @@ class AdaloginController extends JControllerLegacy
 		$view->setLayout('regist');
 		$view->display();
 	}
-	
+
 	/**
 	* process adaid, adaemail, assurance, redi , CSRF_token data from components/com_adalogin/index.php
 	*/
@@ -93,7 +93,7 @@ class AdaloginController extends JControllerLegacy
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
 		$model = $this->getModel($this->_mainmodel);
-	    $ada = new AdaloginModelAda_obj();	
+	    $ada = new AdaloginModelAda_obj();
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		$user = $model->getUser($adaid, $adaemail);
@@ -102,7 +102,7 @@ class AdaloginController extends JControllerLegacy
 				$user->setParam('ASSURANCE',$assurance);
 				$user->save();
 			}
-			// login to joomla 
+			// login to joomla
 			if ($model->loginToJoomla($adaid, $adaemail)) {
 				// goto $redi
 				$this->setRedirect($redi);
@@ -112,9 +112,24 @@ class AdaloginController extends JControllerLegacy
 			}
 		} else {
 			$this->displayRegistForm($view, $adaid, $adaemail, $assurance, $redi);
-		}	
+		}
 	}	// dologin
-	
+
+	/**
+	 * process logout
+	 */
+	public function dologout() {
+		$app = JFactory::getApplication();
+		$app->logout();
+
+		$document = JFactory::getDocument();
+		$view = $this->getView($this->_viewname, $document->getType());
+		$model = &$this->getModel($this->_mainmodel);
+		$view->setModel($model,true);
+		$view->setLayout('logoutform');
+		$view->display();
+	}
+
 	/**
 	* process registform  adaid, adaemail, nick, assurance, redi , CSRF_token data from components/com_adalogin/index.php
 	*/
@@ -124,18 +139,18 @@ class AdaloginController extends JControllerLegacy
 		$adaemail = $input->get('adaemail','','string');
 	    $assurance = $input->get('assurance','','string');
 		$redi = base64_decode($input->get('redi','','string'));
-		if ($redi == '') $redi = JURI::base();	
+		if ($redi == '') $redi = JURI::base();
 	    $nick = $input->get('nick');
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
 		$model = $this->getModel($this->_mainmodel);
-	    $ada = new AdaloginModelAda_obj();	
+	    $ada = new AdaloginModelAda_obj();
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		if ($model->checkNewNick($nick)) {
 			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
-				// login to joomla 
+				// login to joomla
 				if ($model->loginToJoomla($adaid, $adaemail)) {
 					// goto $redi
 					$this->setRedirect($redi);
@@ -145,7 +160,7 @@ class AdaloginController extends JControllerLegacy
 				}
 			} else {
 				echo '<p class="errorMsg">'.$model->getError().'</p>';
-			}		
+			}
 		} else {
 			// display regist form
 			echo '<p class="errorMsg">'.$model->getError().'</p>';

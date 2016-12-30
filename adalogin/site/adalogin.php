@@ -17,6 +17,7 @@ jimport('joomla.application.component.model');
 require_once( JPATH_COMPONENT.'/models/model.php' );
 jimport('joomla.application.component.helper');
 JHTML::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.'/helpers' );
+JHTML::script(JPATH_COMPONENT_ADMINISTRATOR.'/assets/adalogin.js');
 $input = JFactory::getApplication()->input;
 $task = $input->get('task','loginform');
 

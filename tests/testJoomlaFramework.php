@@ -3,8 +3,8 @@
 * test framwork for joomla components unit test
 */
 error_reporting(E_ALL & ~E_NOTICE);
-define( '_JEXEC', 1 );
-define( 'DS', DIRECTORY_SEPARATOR );
+define('_JEXEC', 1);
+define('DS', DIRECTORY_SEPARATOR);
 define('JPATH_BASE', 'adalogin');
 define('JPATH_ROOT', 'adalogin');
 define('JPATH_ADMINISTRATOR', 'adalogin/admin');
@@ -13,14 +13,14 @@ class testDataClass {
 
 	/**
 	* set input parameters for test
-	* $inputs['name1'] = 'value1', $inputs['name2'] = 'value2', .... 
+	* $inputs['name1'] = 'value1', $inputs['name2'] = 'value2', ....
 	*/
 	protected $inputs;
 
 	/**
 	* set Database result, and errorNum, errorMsg for test
-	* $dbResults[0] = JSON_encode('{'field1":"value1", "field2":"value2"}'); 
-	* $dbResults[1] = JSON_encode([{'field1":"value1", "field2":"value2"}, {'field1":"value11", "field2":"value12"}])             
+	* $dbResults[0] = JSON_encode('{'field1":"value1", "field2":"value2"}');
+	* $dbResults[1] = JSON_encode([{'field1":"value1", "field2":"value2"}, {'field1":"value11", "field2":"value12"}])
 	* set $dbErrorNum, $dbErrorMsg
 	*/
 	protected $dbResults;
@@ -35,7 +35,7 @@ class testDataClass {
 	*/
 	protected $remoteResults;
 	protected $remoteIndex;
-		
+
 	function __construct() {
 		$this->clear();
 	}
@@ -70,7 +70,7 @@ class testDataClass {
 		if ($this->dbIndex < count($this->dbResults))
 		   $result = $this->dbResults[$this->dbIndex];
 	    else
-		   $result = '';	
+		   $result = '';
 		$this->dbIndex = $this->dbIndex + 1;
 		return $result;
 	}
@@ -78,7 +78,7 @@ class testDataClass {
 		if ($this->remoteIndex < count($this->remoteResults))
 		   $result = $this->remoteResults[$this->remoteIndex];
 	    else
-		   $result = '';	
+		   $result = '';
 		$this->remoteIndex = $this->remoteIndex + 1;
 		return $result;
 	}
@@ -115,22 +115,22 @@ class JFactory {
 		if (!isset($testApplication)) $testApplication = new JApplication();
 		return $testApplication;
 	}
-	public static  function getDocument() {
+	public static function getDocument() {
 		global $testDocument;
 		if (!isset($testDocument)) $testDocument = new JDocument();
 		return $testDocument;
 	}
-	public static  function getUser($id=0) {
+	public static function getUser($id=0) {
 		global $testUser;
 		if (!isset($testUser)) $testUser = new JUser();
 		$testUser->id = $id;
 		$testUser->username='testElek';
 		return $testUser;
 	}
-	public static  function getLanguage() {
+	public static function getLanguage() {
 		return new JLanguage();
 	}
-	public static  function getDBO() {
+	public static function getDBO() {
 		global $testDatabase;
 		if (!isset($testDatabase)) $testDatabase = new JDatabase();
 		return $testDatabase;
@@ -138,18 +138,23 @@ class JFactory {
 }
 class JApplication {
 	public $input;
-    function __construct() {
+	function __construct() {
 		$this->input = new JInput();
 	}
 	public function getUserStateFromRequest($name, $default='',$dataType='') {
 		return $default;
-	}	
+	}
 	public function getCfg($name, $default='') {
 		return $default;
 	}
-public function login($credentials) {
-	return true;
-}	
+	public function login($credentials) {
+		JFactory::getUser()->guest = false;
+		return true;
+	}
+	public function logout() {
+		JFactory::getUser()->guest = true;
+		return true;
+	}
 }
 class JDocument {
 	public function getType() {
@@ -184,10 +189,10 @@ class JRequest {
 }
 class JURI {
 	public  static function base() {
-		return 'http://localhost/';
+		return 'http://localhost:8080/';
 	}
 	public  static function root() {
-		return 'http://localhost/';
+		return 'http://localhost:8080/';
 	}
 }
 class JText {
@@ -202,14 +207,14 @@ class JHTML {
 }
 class JDatabase {
 	public function setQuery($sql) {
-		
+
 	}
 	public function getQuery() {
 		return new JDatabaseQuery();
 	}
 	public function loadObjectList() {
 		global $testData;
-		return $testData->getDbResult();	
+		return $testData->getDbResult();
 	}
 	public function loadObject() {
 		return $this->loadObjectList();
@@ -282,29 +287,30 @@ unionAll
 unionDistinct
 update
 values
-year	
+year
 */
 	public function select($str) {
-		
+
 	}
 	public function from($str) {
-		
+
 	}
 	public function where($str) {
-		
+
 	}
 	public function order($str) {
-		
+
 	}
 	public function __toString() {
 		return '';
-	}	
+	}
 }
 
 class JUser {
 	public $id = 0;
 	public $username = '';
 	public $name = '';
+	public $guest = true;
 	public function save() {
 		return true;
 	}
@@ -312,7 +318,7 @@ class JUser {
 		return $name;
 	}
 	public function setParam($name,$value) {
-		
+
 	}
 	public function bind($data) {
 		return true;
@@ -323,21 +329,21 @@ class JUser {
 }
 
 class JLanguage {
-	
+
 }
 class JTable {
 	protected $tableName;
 	public function bind($data) {
-		
+
 	}
 	public function getTableName() {
 		return $this->tableName;
 	}
 	public function setError($str) {
-		
+
 	}
 	public function getError() {
-		
+
 	}
 }
 class JControllerLegacy {
@@ -346,7 +352,7 @@ class JControllerLegacy {
 	function __construct($config='') {}
 	public function getView($aviewName = '',$viewType='html') {
 		global $componentName, $viewName;
-		if ($aviewName != '') 
+		if ($aviewName != '')
 			$viewName = $aviewName;
 		require_once (JPATH_COMPONENT.DS.'views'.DS.$viewName.DS.'view.'.$viewType.'.php');
 		$viewClassName = $componentName.'View'.ucfirst($viewName);
@@ -364,11 +370,11 @@ class JControllerLegacy {
 		} else {
 			require_once (JPATH_COMPONENT.DS.'models'.DS.'model.php');
 			$modelClassName = $componentName.'Model';
-		}	
+		}
 		return new $modelClassName ();
 	}
 	public function setRedirect($uri) {
-	  $this->redirectURI = $uri;	
+	  $this->redirectURI = $uri;
 	}
 	public function redirect($message = '') {
 		global $testData;
@@ -391,7 +397,7 @@ class JControllerLegacy {
 		echo 'joomla default browse task';
 	}
 	public function setMessage($msg) {
-		
+
 	}
 }
 class JModelLegacy {
@@ -404,21 +410,21 @@ class JModelLegacy {
 		$this->$name = $value;
 	}
 	public function addIncludePath($str='') {
-		
+
 	}
 	public function addTablePath($str='') {
-		
+
 	}
     public function def($property, $default = null) {
 	   if (isset($this->property) == false) $this->$property = $default;
-	   return $this->$property; 	
+	   return $this->$property;
 	}
 	public function get($property, $default = null) {
-	   if (isset($this->property) == false) 
+	   if (isset($this->property) == false)
 		   return $default;
-	   else 
-	       return $this->$property; 	
-		
+	   else
+	       return $this->$property;
+
 	}
 	public function getDbo() {
 		return $this->_db;
@@ -443,7 +449,7 @@ class JModelLegacy {
 		return array();
 	}
 	public function setState($name,$value) {
-		
+
 	}
 	public function getState($name, $default='') {
 		return $default;
@@ -464,12 +470,12 @@ class JModelLegacy {
 		return 0;
 	}
 }
-class JModelList extends JModelLegacy {	
+class JModelList extends JModelLegacy {
 	public function getQuery() {
 		return new $JQuery();
 	}
 	public function getTotal() {
-		return 0;	
+		return 0;
 	}
 	public function getItems() {
 		return array();
@@ -488,10 +494,10 @@ class JViewLegacy {
 		global $viewName;
 		$tmp = $this->layout.$tmp;
 		if ($tmp == '') $tmp = 'default';
-		
+
 		if ($this->layout != '')
 		  echo 'testJoomlaFramwork view.display '.$this->layout.'_'.$tmp.'<br>';
-		else	
+		else
 		  echo 'testJoomlaFramwork view.display '.$tmp.'<br>';
 		include JPATH_COMPONENT.DS.'views'.DS.$viewName.DS.'tmpl'.DS.$tmp.'.php';
 	}
@@ -505,7 +511,7 @@ class JSession {
 		return $default;
 	}
 	public static function set($name,$value) {
-		
+
 	}
 	public static function checkToken() {
 		return true;
@@ -514,7 +520,7 @@ class JSession {
 
 class JPagination {
   function __construct($total, $limitstart, $limit) {
-	  
+
   }
   public function getListFooter() {
 	  return 'pagination';
@@ -524,9 +530,9 @@ class JPagination {
 function jimport($str) {}
 
 // init globals
-$_SERVER['HTTP_SITE'] = 'localhost';
+$_SERVER['HTTP_SITE'] = 'localhost:8080';
 $_SERVER['REQUEST_URI'] = 'index.php';
 $componentName = 'testComponent';
 $viewName = 'testView';
 $testData = new testDataClass();
-?> 
+?>
