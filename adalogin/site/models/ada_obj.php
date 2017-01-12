@@ -8,28 +8,6 @@
 */ 
 
 
-
-class JoomlaInterface {
-	public function remoteCall($url,$method,$data,$extraHeader='') {
-		$result = '';
-		if ($extraHeader != '') {
-			$extraHeader .= "\r\n";
-		}	
-		$options = array(
-			'http' => array(
-				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
-				'method'=> $method,
-				'content' => http_build_query($data)
-		    )
-		);
-		$context  = stream_context_create($options);
-		return file_get_contents($url, false, $context);
-	}
-}
-
-global $theJoomlaInterface;
-$theJoomlaInterface = new JoomlaInterface();
-
 class AdaloginModelAda_obj {
 	public $joomla_psw;
 
@@ -40,16 +18,8 @@ class AdaloginModelAda_obj {
 	protected $secret; 
 	protected $myURI; 
 	protected $home;
-	protected $interface;
 
-    function __construct($iface = false) {
-        global $theJoomlaInterface;
-		if($iface)
-		{
-			$this->interface = $iface;
-		} else {
-			$this->interface = $theJoomlaInterface;
-        }
+    function __construct() {
 		$db = JFactory::getDBO();
 		$db->setQuery('select * from #__adalogin order by id limit 1');
 		$res = $db->loadObject();
@@ -59,17 +29,19 @@ class AdaloginModelAda_obj {
 		$this->myURI = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$i = strpos($this->myURI,'?');
 		if ($i > 0) $this->myURI = substr($this->myURI,0,$i);
-		$this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		// https is wrong $this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		$this->home = str_replace('/components/com_adalogin','','http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		$i = strpos($this->home,'?');
 		if ($i > 0) $this->home = substr($this->home,0,$i);
-		$this->home = str_replace('/ssologin','',$this->home); // for old ssologin interface enviroment
-		$this->home = str_replace('/adalogin','',$this->home); // for old adalogin interface enviroment
+		//$this->home = str_replace('/ssologin','',$this->home); // for old ssologin interface enviroment
+		//$this->home = str_replace('/adalogin','',$this->home); // for old adalogin interface enviroment
     }
 
 	/**
 	* redirect ADA server, get loginform. Call this method only in joomla component.controller
 	*/
 	public function getLoginURI($redi='') {
+		
 	  $redirectURI = JURI::base().'components/com_adalogin/index.php';	
 	  // $redirectURI = JURI::base().'ssologin/index.php';	uncomment this line in old ssologin enviroment
 	  // $redirectURI = JURI::base().'adalogin/index.php';	uncomment this line in old adalogin enviroment
@@ -88,7 +60,25 @@ class AdaloginModelAda_obj {
 	  * @return string
 	*/
 	public function remoteCall($url,$method,$data,$extraHeader='') {
-        return $this->interface->remoteCall($url,$method,$data,$extraHeader);
+		$result = '';
+		if ($extraHeader != '') {
+			$extraHeader .= "\r\n";
+		}	
+		$options = array(
+			'http' => array(
+				'header'  => "Content-type: application/x-www-form-urlencoded\r\n".$extraHeader,
+				'method'=> $method,
+				'content' => http_build_query($data)
+		    )
+		);
+		if (_UNITTEST == 1) {
+		  global $testData;	
+		  $result = $testData->getRemoteResult();
+		} else {
+		  $context  = stream_context_create($options);
+		  $result = file_get_contents($url, false, $context);
+		}
+		return $result;
 	}
 	
 	/**
@@ -149,7 +139,8 @@ class AdaloginModelAda_obj {
 	public function callback() {
 		$input = JFactory::getApplication()->input;
 		$db = JFactory::getDBO();
-		$userData = null;
+		$session = JFactory::getSession();
+
 		$token = $this->getADAtoken($input->get('code'));
 		// get user data
 		if (isset($token->access_token)) {
@@ -159,13 +150,12 @@ class AdaloginModelAda_obj {
 			$userData->assurances = JSON_encode($userData->assurances);
 		}
 		//$this->home = str_replace('https:','http:',$this->home); //uncomment if https: not supported
-		$userData = JSON_decode('{"userid":30,"email":"30@adatom.hu"}');	
-	
+		
 		if (isset($userData->userid)) {
 			echo '<html>
 			<body>
 			<h2>ADA login client ...</h2>
-			<form name="form1" method="post" action='.$db->quote($this->home).'>
+			<form name="form1" method="post" action='.$db->quote($this->home).' target="_top">
 			<input type="hidden" name="option" value="com_adalogin" />
 			<input type="hidden" name="task" value="dologin" />
 			<input type="hidden" name="Itemid" value="0" />
@@ -176,7 +166,15 @@ class AdaloginModelAda_obj {
 			'.JHTML::_( 'form.token' ).'
 			</form>
 			<script type="text/javascript">
-			  document.forms.form1.submit();
+			  //document.forms.form1.submit();
+			  window.opener.location="'.$this->home.'?option=com_adalogin"+
+			  "&task=dologin&Itemid=0"+
+			  "&'.$session->getFormToken().'=1"+
+			  "&adaid='.$userData->userid.'"+
+			  "&adaemail='.urlencode($userData->email).'"+
+			  "&assurance='.urlencode($userData->assurances).'"+
+			  "&redi='.$input->get("redi","","string").'";
+			  window.close();
 			</script>
 			</body>
 			</html>
