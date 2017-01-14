@@ -150,7 +150,4 @@ Biztonsági figyelmeztetés
 =========================
 Az "appkey", "secret", "psw" adatok
 bizalmasan kezelendőek, azok illetéktelen kezekbe kerülése lehetőséget adhat a 
-joomla rendszerbe történő illegális belépésre.
-
-
-
+joomla rendszerbe történő illegális belépésre.     ...
