@@ -166,15 +166,20 @@ class AdaloginModelAda_obj {
 			'.JHTML::_( 'form.token' ).'
 			</form>
 			<script type="text/javascript">
-			  //document.forms.form1.submit();
-			  window.opener.location="'.$this->home.'?option=com_adalogin"+
-			  "&task=dologin&Itemid=0"+
-			  "&'.$session->getFormToken().'=1"+
-			  "&adaid='.$userData->userid.'"+
-			  "&adaemail='.urlencode($userData->email).'"+
-			  "&assurance='.urlencode($userData->assurances).'"+
-			  "&redi='.$input->get("redi","","string").'";
-			  window.close();
+			  if (window.opener) {
+				  // ha JS popup -ban fut
+				  window.opener.location="'.$this->home.'?option=com_adalogin"+
+				  "&task=dologin&Itemid=0"+
+				  "&'.$session->getFormToken().'=1"+
+				  "&adaid='.$userData->userid.'"+
+				  "&adaemail='.urlencode($userData->email).'"+
+				  "&assurance='.urlencode($userData->assurances).'"+
+				  "&redi='.$input->get("redi","","string").'";
+			      window.close();
+			  } else {
+				// ha top browser ablakban vagy iframe -ben fut  
+			    document.forms.form1.submit(); 
+			  }
 			</script>
 			</body>
 			</html>
