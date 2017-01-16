@@ -5,6 +5,7 @@ Joomla plugin for logging in with adatom.hu ADA service
 IN ENGLISH
 ==========
 
+
 Anonymous Digital Identification (ADA) system integration, Joomla 3.x
 =====================================================================
 see: https://adatom.hu/
