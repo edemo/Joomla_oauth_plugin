@@ -1,7 +1,6 @@
 #encoding: utf-8
 from UIActions import UIActions
 from selenium.webdriver.common.by import By
-import pdb
 import time
 
 class UIProcedures(UIActions):

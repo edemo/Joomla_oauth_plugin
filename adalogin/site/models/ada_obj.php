@@ -30,7 +30,7 @@ class AdaloginModelAda_obj {
 		$i = strpos($this->myURI,'?');
 		if ($i > 0) $this->myURI = substr($this->myURI,0,$i);
 		// https is wrong $this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-		$this->home = str_replace('/components/com_adalogin','','http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		$this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		$i = strpos($this->home,'?');
 		if ($i > 0) $this->home = substr($this->home,0,$i);
 		//$this->home = str_replace('/ssologin','',$this->home); // for old ssologin interface enviroment
