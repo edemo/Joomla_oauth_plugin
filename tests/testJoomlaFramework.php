@@ -8,6 +8,7 @@ define( 'DS', DIRECTORY_SEPARATOR );
 define('JPATH_BASE', 'adalogin');
 define('JPATH_ROOT', 'adalogin');
 define('JPATH_ADMINISTRATOR', 'adalogin/admin');
+define('_UNITTEST', '1');
 
 class testDataClass {
 
@@ -136,6 +137,9 @@ class JFactory {
 		global $testDatabase;
 		if (!isset($testDatabase)) $testDatabase = new JDatabase();
 		return $testDatabase;
+	}
+	public static function getSession() {
+		return new JSession();
 	}
 }
 class JApplication {
@@ -523,6 +527,9 @@ class JSession {
 	}
 	public static function checkToken() {
 		return true;
+	}
+	public static function getFormToken() {
+		return "testFormToken";
 	}
 }
 

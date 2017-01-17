@@ -30,7 +30,7 @@ class AdaloginModelAda_obj {
 		$i = strpos($this->myURI,'?');
 		if ($i > 0) $this->myURI = substr($this->myURI,0,$i);
 		// https is wrong $this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-		$this->home = str_replace('/components/com_adalogin','','http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+		$this->home = str_replace('/components/com_adalogin','','https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 		$i = strpos($this->home,'?');
 		if ($i > 0) $this->home = substr($this->home,0,$i);
 		//$this->home = str_replace('/ssologin','',$this->home); // for old ssologin interface enviroment
@@ -166,15 +166,20 @@ class AdaloginModelAda_obj {
 			'.JHTML::_( 'form.token' ).'
 			</form>
 			<script type="text/javascript">
-			  //document.forms.form1.submit();
-			  window.opener.location="'.$this->home.'?option=com_adalogin"+
-			  "&task=dologin&Itemid=0"+
-			  "&'.$session->getFormToken().'=1"+
-			  "&adaid='.$userData->userid.'"+
-			  "&adaemail='.urlencode($userData->email).'"+
-			  "&assurance='.urlencode($userData->assurances).'"+
-			  "&redi='.$input->get("redi","","string").'";
-			  window.close();
+			  if (window.opener) {
+				  // ha JS popup -ban fut
+				  window.opener.location="'.$this->home.'?option=com_adalogin"+
+				  "&task=dologin&Itemid=0"+
+				  "&'.$session->getFormToken().'=1"+
+				  "&adaid='.$userData->userid.'"+
+				  "&adaemail='.urlencode($userData->email).'"+
+				  "&assurance='.urlencode($userData->assurances).'"+
+				  "&redi='.$input->get("redi","","string").'";
+			      window.close();
+			  } else {
+				// ha top browser ablakban vagy iframe -ben fut  
+			    document.forms.form1.submit(); 
+			  }
 			</script>
 			</body>
 			</html>
