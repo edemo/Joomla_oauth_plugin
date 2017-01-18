@@ -7,6 +7,7 @@
 * @license #GNU/GPL
 *
 * ADA authoraze service integarttion
+* 2016.12.15 extradata kezelés. a registform -on "extrafields[filename]" nevü extra mezők lehetnek.
 */
 
 // no direct access
@@ -116,7 +117,8 @@ class AdaloginController extends JControllerLegacy
 	}	// dologin
 	
 	/**
-	* process registform  adaid, adaemail, nick, assurance, redi , CSRF_token data from components/com_adalogin/index.php
+	* process registform  adaid, adaemail, nick, assurance, redi , extrafields(array), CSRF_token data 
+	* from from. caller: components/com_adalogin/index.php
 	*/
 	public function processform() {
 		$input = JFactory::getApplication()->input;
@@ -126,6 +128,7 @@ class AdaloginController extends JControllerLegacy
 		$redi = base64_decode($input->get('redi','','string'));
 		if ($redi == '') $redi = JURI::base();	
 	    $nick = $input->get('nick');
+		$extrafields = $input->get('extrafields',array(),'array');
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
@@ -134,9 +137,14 @@ class AdaloginController extends JControllerLegacy
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		if ($model->checkNewNick($nick)) {
-			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
+			if ($model->save($adaid, $nick, $adaemail, $assurance, $extrafields)) {
 				// login to joomla 
 				if ($model->loginToJoomla($adaid, $adaemail)) {
+					$user = JFactory::getUser();
+					if ($assurance != $user->getParam('ASSURANCE')) {
+						$user->setParam('ASSURANCE',$assurance);
+						$user->save();
+					}
 					// goto $redi
 					$this->setRedirect($redi);
 					$this->redirect();
@@ -152,5 +160,30 @@ class AdaloginController extends JControllerLegacy
 			$this->displayRegistForm($view, $adaid, $adaemail, $assurance, $redi);
 		}
 	} // processform
+	
+	/**
+	* logout  - task  loogout from joomla and from ADA
+	*/
+	public function logout() {
+		$app = JFactory::getApplication();
+		$app->logout();		
+		$view = $this->getView($this->_viewname,'html');
+		$view->setLayout('logout');
+		$view->display();
+	}
+	
+	/**
+	* Kilépés az ADA rendszerböl
+	*/
+	public function adalogout() {
+		echo '<div style="display:block">
+		<iframe name="adalogoutfrm" height="100" width="100" src="https://adatom.hu/v1/logout"></iframe>
+		</div>
+		';
+		$view = $this->getView($this->_viewname,'html');
+		$view->setLayout('adalogout');
+		$view->display();
+	}
+	
 }// class
 ?>

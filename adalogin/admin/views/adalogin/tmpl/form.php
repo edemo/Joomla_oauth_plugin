@@ -60,3 +60,4 @@ Joomla.submitbutton = function(task)
 		<input type="hidden" name="view" value="adalogin" />
 		<?php echo JHTML::_( 'form.token' ); ?>
 	</form>
+	<p>Az ADA rendszerből történő kijelentkezéshez a http://adaserver_domain/ada/v1/logout' url-t kell aktivizálni, egy láthatatlan iframe-be irányitva az outputot.</p>
