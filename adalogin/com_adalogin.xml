@@ -7,7 +7,7 @@
 	<authorUrl>http://adatmagus.hu</authorUrl>
 	<copyright>Copyright (C) 2016 Fogler Tibor Open Source Matters. All rights reserved.</copyright>	
 	<license>GNU/GPL</license>
-	<version>1.00</version>
+	<version>4.01</version>
 	<description>login into joomla use adataom.hu user authorization service.</description>
 	<installfile></installfile>
 	<uninstallfile></uninstallfile>

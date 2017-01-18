@@ -8,6 +8,7 @@ define( 'DS', DIRECTORY_SEPARATOR );
 define('JPATH_BASE', 'adalogin');
 define('JPATH_ROOT', 'adalogin');
 define('JPATH_ADMINISTRATOR', 'adalogin/admin');
+define('_UNITTEST', '1');
 
 class testDataClass {
 
@@ -28,7 +29,7 @@ class testDataClass {
 	protected $dbErrorMsg;
 	protected $dbIndex;
 
-    public $gotArgs = array();
+    	public $gotArgs = array();
 	public $mock_data = array();
 	/**
 	* set remoteCall results for test
@@ -37,6 +38,8 @@ class testDataClass {
 	protected $remoteIndex;
 		
 	function __construct() {
+		global $testUser;
+		$testUser = new JUser();
 		$this->clear();
 	}
 	public function clear() {
@@ -124,7 +127,7 @@ class JFactory {
 		global $testUser;
 		if (!isset($testUser)) $testUser = new JUser();
 		$testUser->id = $id;
-		$testUser->username='testElek';
+		$testUser->username='guest';
 		return $testUser;
 	}
 	public static  function getLanguage() {
@@ -135,10 +138,13 @@ class JFactory {
 		if (!isset($testDatabase)) $testDatabase = new JDatabase();
 		return $testDatabase;
 	}
+	public static function getSession() {
+		return new JSession();
+	}
 }
 class JApplication {
 	public $input;
-    	function __construct() {
+	    function __construct() {
 		$this->input = new JInput();
 	}
 	public function getUserStateFromRequest($name, $default='',$dataType='') {
@@ -148,10 +154,17 @@ class JApplication {
 		return $default;
 	}
 	public function login($credentials) {
+		global $testUser;
+		$testUser->id = 1;
+		$testUser->username='testElek';
+		$testUser->name='Test Elek';
 		return true;
 	}	
 	public function logout() {
-		return true;
+		global $testUser;
+		$testUser->id=0;
+		$testUser->username = 'guest';
+		$testUser->name = '';
 	}
 }
 class JDocument {
@@ -308,6 +321,7 @@ class JUser {
 	public $id = 0;
 	public $username = '';
 	public $name = '';
+        public $groups = array();
 	public function save() {
 		return true;
 	}
@@ -377,6 +391,7 @@ class JControllerLegacy {
 		global $testData;
         $testData->mock_data["redirectURI"] = $this->redirectURI;
 		$testData->mock_data["redirectMsg"] = $message;
+		echo 'redirect:'.$this->redirectURI.' message='.$message."\n";
 	}
 	public function edit() {
 		echo 'joomla default edit task';
@@ -513,6 +528,9 @@ class JSession {
 	public static function checkToken() {
 		return true;
 	}
+	public static function getFormToken() {
+		return "testFormToken";
+	}
 }
 
 class JPagination {
@@ -521,6 +539,14 @@ class JPagination {
   }
   public function getListFooter() {
 	  return 'pagination';
+  }
+}
+class UsersModelGroup {
+  public function save($data) {
+    return true;
+  }
+  public function getItem($id) {
+    return false;
   }
 }
 // global functions
