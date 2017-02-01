@@ -2,7 +2,7 @@ all:
 	tools/script
 
 testenv:
-	docker run --rm -p 5901:5901 -v $$(pwd):/joomla_oauth_plugin -it magwas/wp_oauth_plugin /bin/bash
+	docker run --rm -p 5901:5901 -w /joomla_oauth_plugin -v $$(pwd):/joomla_oauth_plugin -it magwas/wp_oauth_plugin /bin/bash
 
 check:
 	phpunit --stderr tests/site

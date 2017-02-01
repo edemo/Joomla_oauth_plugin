@@ -1,0 +1,1 @@
+PYTHONPATH=end2endtest python3 -m unittest LoginTest.LoginTest.test_login

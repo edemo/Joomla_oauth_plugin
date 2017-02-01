@@ -5,6 +5,7 @@ Joomla plugin for logging in with adatom.hu ADA service
 IN ENGLISH
 ==========
 
+
 Anonymous Digital Identification (ADA) system integration, Joomla 3.x
 =====================================================================
 see: https://adatom.hu/
@@ -13,7 +14,12 @@ License: GNU / GPL
 Author: Tibor Fogler
 Author email: tibor.fogler@gmail.com
 Web Author: adatmagus.hu
-Version 4.00 10/11/2016.
+Version 4.01 15/12/2016.
+
+Version info
+============
+2016.10.15  V 4.01 powered extrafields, logout function
+
 
 The Joomla system https: were posted should also be available.
 When a visitor enters the ADA login screen; it is a "redi" URL parameter specified page.
@@ -84,7 +90,10 @@ Licensz: GNU/GPL
 Szerző: Tibor Fogler 
 Szerző email: tibor.fogler@gmail.com
 Szerző web: adatmagus.hu
-Verzió: 4.00   2016.11.10.
+Verzió: 4.01   2016.12.15.
+
+Verzió infó
+2016.12.15 V 4.01 extrafields támogatás, logout funkció
 
 A Joomla rendszernek https: -el is elérhetőnek kell lennie.
 Ha a látogató belépet az ADA login képernyőn; akkor a "redi" URL paraméterben megadott oldalra kerül.
@@ -142,5 +151,4 @@ Biztonsági figyelmeztetés
 =========================
 Az "appkey", "secret", "psw" adatok
 bizalmasan kezelendőek, azok illetéktelen kezekbe kerülése lehetőséget adhat a 
-joomla rendszerbe történő illegális belépésre.
-
+joomla rendszerbe történő illegális belépésre.     ...
