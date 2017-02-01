@@ -15,7 +15,7 @@ echo '
 	<input type="hidden" name="adaemail" value="'.$this->adaemail.'" />
 	<input type="hidden" name="assurance" value="'.str_replace('"','',$this->assurance).'" />
 	<input type="hidden" name="redi" value="'.$this->redi.'" />
-	<p>'.JText::_('ADALOGIN_ADA_ID').':&nbsp;&nbsp;<var>'.$this->adaid.'</var></p>
+	<h2>Első belépés ADA loginnal</h2>
 	<p>'.JText::_('ADALOGIN_ADA_EMAIL').':&nbsp;&nbsp;&nbsp;<var>'.$this->adaemail.'</var></p>
 	<div class="help">'.JText::_('ADALOGIN_NICKHELP').'</div>
 	<table border="0" class="fields" style="width:auto">
