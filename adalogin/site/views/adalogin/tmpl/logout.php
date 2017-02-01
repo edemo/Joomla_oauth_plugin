@@ -1,13 +1,12 @@
 <div id="logoutScreen">
-	<img src="https://adatom.hu/images/logo/adalogo_379x143.png" />
+    <div style="display:none">
+	  <iframe name="adalogout" width="200" height="200" src="https://adatom.hu/ada/v1/logout"></iframe>
+	</div>
 	<center>
-		  <p><?php echo JText::_('ADALOGIN_LOGOUTMSG'); ?></p>
 		  <p> </p>
 		  <p> </p>
-		  <p>
-		    <a href="https://adatom.hu">
-  			  <?php echo JText::_('ADALOGIN_ADALOGOUT'); ?>
-			</a>
-		  </p>
+		  <p>Sikeresen kijelentkezett a web oldalról.</p>
+		  <p> </p>
+		  <p> </p>
 	</center>  
 </div>
