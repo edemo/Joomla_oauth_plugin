@@ -98,10 +98,7 @@ class AdaloginController extends JControllerLegacy
 		$view->setModel($model,true);
 		$user = $model->getUser($adaid, $adaemail);
 		if ($user->id > 0) {
-			if ($assurance != $user->getParam('ASSURANCE')) {
-				$user->setParam('ASSURANCE',$assurance);
-				$user->save();
-			}
+			$model->setUserAssurances($user, $assurance);
 			// login to joomla 
 			if ($model->loginToJoomla($adaid, $adaemail)) {
 				// goto $redi
@@ -152,6 +149,7 @@ class AdaloginController extends JControllerLegacy
 			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
 				// login to joomla 
 				if ($model->loginToJoomla($adaid, $adaemail)) {
+					$model->setUserAssurances($user, $assurance);
 					// goto $redi
 					$this->setRedirect($redi);
 					$this->redirect();
