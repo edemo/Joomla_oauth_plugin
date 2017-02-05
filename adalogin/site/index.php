@@ -18,12 +18,16 @@ require_once ( JPATH_BASE .DS.'includes'.DS.'defines.php' );
 require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
 require_once ( JPATH_BASE .DS.'libraries'.DS.'joomla'.DS.'factory.php' );
 require_once ( JPATH_BASE .DS.'components'.DS.'com_adalogin'.DS.'models'.DS.'ada_obj.php');
+
+
 JDEBUG ? $_PROFILER->mark( 'afterLoad' ) : null;
 $mainframe = JFactory::getApplication('site');
 $mainframe->initialise();
 jimport('joomla.plugin.helper');
 jimport('joomla.user.helper');
 $input = JFactory::getApplication()->input;
+$language = JFactory::getLanguage();
+$language->load('com_adalogin', JPATH_SITE, null, true).'<br />';
 
 // process code
 if ($input->get('code','','string')) {
