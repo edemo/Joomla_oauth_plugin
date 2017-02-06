@@ -6,15 +6,7 @@
 * @license #GNU/GPL
  */
 
-// ADA server callback
-// ===================
-if (isset($_GET['code'])) {
-   include 'index.php';
-   exit();
-} 
-
-// call from joomla
-// ================
+//--No direct access
 defined('_JEXEC') or die('=;)');
 // DS has removed from J 3.0
 if(!defined('DS')) {

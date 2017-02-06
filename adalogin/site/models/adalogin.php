@@ -125,7 +125,20 @@ class AdaloginModelAdalogin extends JModelLegacy  {
 	$result = JFactory::getApplication()->login($credentials);
 	if ($result == false) $this->setError('Error in Joomla login');
 	return $result;
-  }	  
-  
+  }
+  /**
+  * user assurance tárolása a joomla adatbázisba
+  * @param JUser
+  * @param string assurance
+  * return void  
+  */  
+  public function setUserAssurances($user, $assurance) {
+	if (is_object($user)) {  
+		if ($assurance != $user->getParam('ASSURANCE')) {
+			$user->setParam('ASSURANCE',$assurance);
+			$user->save();
+		}  
+	}
+  }	
 }
 ?> 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" method="upgrade" version="1.6">
 	<name>Adalogin</name>
-	<creationDate>2017-02-01</creationDate>
+	<creationDate>2016-11-08</creationDate>
 	<author>Fogler Tibor</author>
 	<authorEmail>tibor.fogler@gmail.com</authorEmail>
 	<authorUrl>http://adatmagus.hu</authorUrl>
@@ -27,8 +27,6 @@
 			<filename>index.html</filename>			
 			<filename>router.php</filename>
 			<filename>index.php</filename>
-			<filename>ada_obj.php</filename>
-			<filename>JoomlaInterface.php</filename>
 			<folder>controllers</folder>
 			<folder>helpers</folder>
 			<folder>models</folder>
@@ -37,7 +35,7 @@
 	</files>	
 	<languages folder="site">
 		<language tag="en-GB">language/en-GB.com_adalogin.ini</language>
-    	<language tag="de-DE">language/hu-HU.com_adalogin.ini</language>            
+    	<language tag="hu-HU">language/hu-HU.com_adalogin.ini</language>            
 	</languages>
 	<administration>
 		<menu link="index.php?option=com_adalogin">Adalogin</menu>
@@ -59,9 +57,12 @@
 		</files>	
         <languages folder="admin">
         	<language tag="en-GB">language/en-GB.com_adalogin.ini</language>
-            <language tag="de-DE">language/hu-HU.com_adalogin.ini</language>
+            <language tag="hu-HU">language/hu-HU.com_adalogin.ini</language>
         	<language tag="en-GB">language/en-GB.com_adalogin.sys.ini</language>
-            <language tag="de-DE">language/hu-HU.com_adalogin.sys.ini</language>                           
+            <language tag="hu-HU">language/hu-HU.com_adalogin.sys.ini</language>                           
 		</languages>		
 	</administration>
+	<updateservers>
+		<server type="extension" priority="2" name="com_adalogin Updates">https://github.com/edemo/Joomla_oauth_plugin/raw/master/extension.xml</server>
+	 </updateservers>	
 </extension>
