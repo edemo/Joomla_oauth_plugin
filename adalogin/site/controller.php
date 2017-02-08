@@ -7,6 +7,7 @@
 * @license #GNU/GPL
 *
 * ADA authoraze service integarttion
+* update info   2017.02.08 no ask nickname
 */
 
 // no direct access
@@ -108,7 +109,28 @@ class AdaloginController extends JControllerLegacy
 				echo '<p class="errorMsg">'.$model->getError().'</p>';
 			}
 		} else {
-			$this->displayRegistForm($view, $adaid, $adaemail, $assurance, $redi);
+			//+ 2017.02.08 no ask nickname
+			// $this->displayRegistForm($view, $adaid, $adaemail, $assurance, $redi);
+			//- 2017.02.08 no ask nickname
+
+			//+ 2017.02.08 no ask nickname start new code
+			$nick = $adaid;
+			if ($model->save($adaid, $nick, $adaemail, $assurance)) {
+				$user = $model->getUser($adaid, $adaemail);
+				// login to joomla 
+				if ($model->loginToJoomla($adaid, $adaemail)) {
+					$model->setUserAssurances($user, $assurance);
+					// goto $redi
+					$this->setRedirect($redi);
+					$this->redirect();
+				} else {
+					echo '<p class="errorMsg">'.$model->getError().'</p>';
+				}
+			} else {
+					echo '<p class="errorMsg">'.$model->getError().'</p>';
+			}	
+			//- 2017.02.08 no ask nickname end new code
+				
 		}	
 	}	// dologin
 
