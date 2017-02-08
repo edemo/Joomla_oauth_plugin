@@ -40,10 +40,24 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 	    $testData->setInput('adaid',123);
 		$testData->setInput('adaemail','test@test.hu');
 		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('redi','');
+		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
+		$testData->addDbResult(false); // nem találja username szerint
+		$testData->addDbResult(false); // nem találja email szerint
+		$testData->addDbResult(false); // nemtalálja params szerint
+		// megtalálja a usert
+		$testData->addDbResult(JSON_decode('
+		"username":"testElek"          
+		}'));
+		$testData->addDbResult(JSON_decode('{
+		"id":1, 
+		"username":"testElek" 
+		}'));
+
         $controller = new AdaloginController();
         $controller->dologin();
-		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
+        $this->assertEquals(
+            'http://localhost/redi.php',
+            $testData->mock_data['redirectURI']);
     } 
     public function test_dologin_user_exists()  {
 		global $testData,$componentName;
