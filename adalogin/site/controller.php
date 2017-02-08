@@ -7,7 +7,6 @@
 * @license #GNU/GPL
 *
 * ADA authoraze service integarttion
-* update info   2017.02.08 no ask nickname
 */
 
 // no direct access
@@ -130,7 +129,7 @@ class AdaloginController extends JControllerLegacy
 					echo '<p class="errorMsg">'.$model->getError().'</p>';
 			}	
 			//- 2017.02.08 no ask nickname end new code
-				
+			
 		}	
 	}	// dologin
 
