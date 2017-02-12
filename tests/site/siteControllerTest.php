@@ -24,100 +24,12 @@ class adaloginControllerTest extends PHPUnit_Framework_TestCase {
 		}'));
 	}
 
-    public function test_loginform()  {
+	public function test_loginform()  {
 		global $testData,$componentName;
 		$this->setupConfig();
         $controller = new AdaloginController();
         $controller->loginform();
-        $this->assertEquals(
-            'https://adatom.hu/ada/v1/oauth2/auth?response_type=code&client_id=APP_ID_COMES_HERE&redirect_uri=https%3A%2F%2Flocalhost%2Fcomponents%2Fcom_adalogin%2Findex.php%3Fredi%3DaHR0cDovL2xvY2FsaG9zdC8%3D',
-            $testData->mock_data['redirectURI']);
+		$this->expectOutputRegex('|https://adatom.hu/ada/v1/oauth2/|');   
     }
-    public function test_dologin_new_user()  {
-		global $testData,$componentName;
-		$this->setupConfig();
-		$testData->addDbResult(false);
-	    $testData->setInput('adaid',123);
-		$testData->setInput('adaemail','test@test.hu');
-		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
-		$testData->addDbResult(false); // nem találja username szerint
-		$testData->addDbResult(false); // nem találja email szerint
-		$testData->addDbResult(false); // nemtalálja params szerint
-		// megtalálja a usert
-		$testData->addDbResult(JSON_decode('
-		"username":"testElek"          
-		}'));
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"username":"testElek" 
-		}'));
-
-        $controller = new AdaloginController();
-        $controller->dologin();
-        $this->assertEquals(
-            'http://localhost/redi.php',
-            $testData->mock_data['redirectURI']);
-    } 
-    public function test_dologin_user_exists()  {
-		global $testData,$componentName;
-		$this->setupConfig();
-		$testData->addDbResult(JSON_decode('{
-		"id":1, 
-		"username":"testElek" 
-		}'));
-	    $testData->setInput('adaid',123);
-		$testData->setInput('adaemail','test@test.hu');
-		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
-        $controller = new AdaloginController();
-        $controller->dologin();
-        $this->assertEquals(
-            'http://localhost/redi.php',
-            $testData->mock_data['redirectURI']);
-    } 
-    public function test_processform_ok()  {
-		global $testData,$componentName;
-		$this->setupConfig();
-		$testData->addDbResult(false);
-		
-	    $testData->setInput('adaid',123);
-		$testData->setInput('adaemail','test@test.hu');
-		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('nick','testElek');
-		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
-        $controller = new AdaloginController();
-        $controller->processform();
-        $this->assertEquals(
-            'http://localhost/redi.php',
-            $testData->mock_data['redirectURI']);
-    } 
-    public function test_processform_nick_empty()  {
-		global $testData,$componentName;
-		$this->setupConfig();
-		$testData->addDbResult(false);
-	    $testData->setInput('adaid',123);
-		$testData->setInput('adaemail','test@test.hu');
-		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('nick','');
-		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
-        $controller = new AdaloginController();
-        $controller->processform();
-		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
-    } 
-    public function test_processform_nick_used()  {
-		global $testData,$componentName;
-		$this->setupConfig();
-		$testData->addDbResult(JSON_encode('{"id":2,"username":"testElek"}'));
-	    $testData->setInput('adaid',123);
-		$testData->setInput('adaemail','test@test.hu');
-		$testData->setInput('assurance','["magyar"]');
-		$testData->setInput('nick','testElek');
-		$testData->setInput('redi',base64_encode('http://localhost/redi.php'));
-        $controller = new AdaloginController();
-        $controller->processform();
-		$this->expectOutputRegex('/testJoomlaFramwork view\.display regist/');   
-    } 
-	
 }
 ?>
