@@ -141,6 +141,9 @@ class JFactory {
 	public static function getSession() {
 		return new JSession();
 	}
+	public static function getConfig() {
+		return JSON_decode('{"secret":"abcdefg"}');
+	}
 }
 class JApplication {
 	public $input;
@@ -314,7 +317,10 @@ year
 	}
 	public function __toString() {
 		return '';
-	}	
+	}
+	public function join($str)	{
+		
+	}
 }
 
 class JUser {

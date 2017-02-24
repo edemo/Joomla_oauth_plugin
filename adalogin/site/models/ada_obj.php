@@ -142,7 +142,7 @@ class AdaloginModelAda_obj {
 	}
 	
 	/**
-	  * callback funtion for ADA server
+	  * callback funtion for ADA server: redict into com_adalogin task=dologin by spec. CSRtoken
 	  * @JRequest string code  ADA auth code
 	  * @JRequest base64_ecoded redi  redirect URL after success joomla login base64_encoded
 	  * @return void
@@ -151,6 +151,7 @@ class AdaloginModelAda_obj {
 		$input = JFactory::getApplication()->input;
 		$db = JFactory::getDBO();
 		$token = $this->getADAtoken($input->get('code'));
+		$CSRtoken = '';
 		// get user data
 		if (isset($token->access_token)) {
 			$userData = $this->getADAuserData($token);
@@ -161,10 +162,13 @@ class AdaloginModelAda_obj {
 		//$this->home = str_replace('https:','http:',$this->home); //uncomment if https: not supported
 		
 		if (isset($userData->userid)) {
+			$session = JFactory::getSession();
+			$config = JFactory::getConfig();
+			$CSRtoken = md5($userData->userid.$config->secret);
 			echo '<html>
 			<body>
 			<h2>ADA login client ...</h2>
-			<form name="form1" method="post" action='.$db->quote($this->home).'>
+			<form name="form1" method="post" action='.$db->quote($this->home).' target="_top">
 			<input type="hidden" name="option" value="com_adalogin" />
 			<input type="hidden" name="task" value="dologin" />
 			<input type="hidden" name="Itemid" value="0" />
@@ -172,10 +176,21 @@ class AdaloginModelAda_obj {
 			<input type="hidden" name="adaemail" value='.$db->quote($userData->email,'','string').' />
 			<input type="hidden" name="assurance" value='.$db->quote($userData->assurances,'','string').' />
 			<input type="hidden" name="redi" value='.$db->quote($input->get('redi','','string')).' />
-			'.JHTML::_( 'form.token' ).'
+			<input type="hidden" name="'.$CSRtoken.'" value="1" />
 			</form>
 			<script type="text/javascript">
-			  document.forms.form1.submit();
+			  if (window.opener) {
+			    window.opener.location="'.$this->home.'?option=com_adalogin"+
+			    "&task=dologin&Itemid=0"+
+			    "&'.$CSRtoken.'=1"+
+			    "&adaid='.$userData->userid.'"+
+			    "&adaemail='.urlencode($userData->email).'"+
+			    "&assurance='.urlencode($userData->assurances).'"+
+			    "&redi='.$input->get("redi","","string").'";
+			    window.close();
+			  } else {
+			    document.forms.form1.submit();
+			  }	
 			</script>
 			</body>
 			</html>

@@ -9,10 +9,10 @@ check:
 	phpunit --stderr tests/admin
 
 e2e:	installcomponent
-	PYTHONPAT=end2endtest python3 -m unittest discover -v -f -s end2endtest -p "*.py"
+	PYTHONPATH=end2endtest python3 -m unittest discover -v -f -s end2endtest -p "*.py"
 
 installcomponent:	recording
-	python3 end2endtest/initialize.py
+	PYTHONPATH=end2endtest python3 initialize/initialize.py
 	touch installcomponent
 
 cleanup: stoprecording
