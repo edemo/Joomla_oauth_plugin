@@ -7,5 +7,6 @@ set -e
 . tools/prepare
 tools/runapache
 make check
+make deploy
 make e2e
 
