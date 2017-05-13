@@ -68,11 +68,11 @@ this "entry" automatic loged in the Joomla system and menu parameter or "redi" d
 It is specified tab.
 
 if you want display ada login form in window popup:
-
+```
 <a href="#" onclick="open('index.php?option=com_adalogin&tmpl=comopnent','ADA','width=370,height=600,left=100,top=100'); false">
   ADA login
 </a>
-
+```
 
 The Joomla admin permissions can be configured to generate user data.
 Default is set up in the newly ADA data entry members of the "Resgistered" group.
@@ -148,10 +148,11 @@ megadott lapra kerül.
 
 Ha windows popup -ban akarjuk az ADA login ablakot megjeleniteni, akkor a login -t valahogy ehez hasonlóan kell megoldani:
 
+```
 <a href="#" onclick="open('index.php?option=com_adalogin&tmpl=comopnent','ADA','width=370,height=600,left=100,top=100'); false">
   ADA bejelentkezés
 </a>
-
+```
 
 A joomla admin felületen a generált felhasználói adat jogosultságai beállíthatóak.
 Alepértelmezetten az újonnan létrehozodd ADA belépési adatok a "Resgisztrált" csoport tagjai.
