@@ -97,7 +97,8 @@ class AdaloginController extends JControllerLegacy
 					window.location = "<?php echo $url; ?>";
 				} else {
 					// normál ablakban fut
-					open('<?php echo $url; ?>','ADA','width=370,height=600,left=100,top=100');
+					// POPUP BLOCK! open('<?php echo $url; ?>','ADA','width=370,height=600,left=100,top=100');
+					window.location = "<?php echo $url; ?>";
 				}
 			});
 		  </script>

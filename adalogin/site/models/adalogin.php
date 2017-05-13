@@ -127,15 +127,63 @@ class AdaloginModelAdalogin extends JModelLegacy  {
 	return $result;
   }
   /**
-  * user assurance tárolása a joomla adatbázisba
+  * user assurance tárolása a joomla adatbázisba ($assurance a params -ba és usergroupsba)
   * @param JUser
   * @param string assurance
   * return void  
   */  
   public function setUserAssurances($user, $assurance) {
+	$db = JFactory::getDBO();  
+	$canUpgrade = false;
+	
+	// assurances usergroupok beolvasása a $assuranceGroups -ba
+	$assuranceGroups = array();  // key: group_id, value:groupTitle = assuranceName
+	$db->setQuery('select id,title
+	from #__usergroups
+	where parent_id = 2');
+	$res = $db->loadObjerctList();
+	foreach ($res as $res1) $assuranceGroups[$res1->id] = $res1->title;
+	
+	// ha még nincs benne a $assurance valemeyik elem akkor most létrehozzuk
+	foreach ($assurance as $as) {
+	  if (in_array($as, $assuranceGroups) == false) {
+		$canUpgrade = true;  
+		$group = array('id'=>0, 'title'=> $as, 'parent_id'=>2);
+		JLoader::import('joomla.application.component.model');
+		JLoader::import('group', JPATH_ADMINISTRATOR.'/components/com_users/models');
+		$groupModel = JModelLegacy::getInstance( 'Group', 'UsersModel' );
+		if(! $groupModel->save($group) ) {
+		   JFactory::getApplication()->enqueueMessage($groupModel->getError());
+		   return false;
+		}		  
+	  }
+	}
+	
+	// szükség esetén az assurances usergroupok ismételt beolvasása a $assuranceGroups -ba
+	if ($canUpgrade) {
+		$assuranceGroups = array();  // key: group_id, value:groupTitle = assuranceName
+		$db->setQuery('select id,title
+		from #__usergroups
+		where parent_id = 2');
+		$res = $db->loadObjerctList();
+		foreach ($res as $res1) $assuranceGroups[$res1->id] = $res1->title;
+	}
+
 	if (is_object($user)) {  
 		if ($assurance != $user->getParam('ASSURANCE')) {
 			$user->setParam('ASSURANCE',$assurance);
+			
+			// user group maps-ből az assurancesek törlése
+			foreach ($user->groups as $key => $value) {
+			  if (in_array($key, $assuranceGroups)) unset($user->groups[$key]); 
+			}  
+			
+			// user group maps-be az assurancesek beirása
+			foreach ($assurance as $as) {
+				foreach ($assuranceGropus as $key => $value) {
+					if ($value == $as) $user->groups[$key] = $key;
+				}
+			}
 			$user->save();
 		}  
 	}
