@@ -134,8 +134,6 @@ class AdaloginController extends JControllerLegacy
 			exit();
 		};
 		if ($redi == '') $redi = JURI::root();
-		// nem jó a redi képzés :(
-		$redi = JURI::root();
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
