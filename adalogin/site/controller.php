@@ -122,23 +122,25 @@ class AdaloginController extends JControllerLegacy
 	* process adaid, adaemail, assurance, redi , CSRFtoken data from components/com_adalogin/index.php
 	* CSRtoken = md5($adait.$config->secret)
 	*/
-    public function dologin() {
+  public function dologin() {
 		$config = JFactory::getConfig();
 		$input = JFactory::getApplication()->input;
 		$adaid = $input->get('adaid');
 		$adaemail = $input->get('adaemail','','string');
-	    $assurance = $input->get('assurance','','string');
+	  $assurance = $input->get('assurance','','string');
 		$redi = base64_decode($input->get('redi','','string'));
 		if ($input->get(md5($adaid.$config->secret)) != 1) {
 			echo 'invalid token';
 			exit();
 		};
 		if ($redi == '') $redi = JURI::root();
+		// nem jó a redi képzés :(
+		// $redi = JURI::root();
 		$document = JFactory::getDocument();
 		$viewType = $document->getType();
 		$view = $this->getView($this->_viewname,$viewType);
 		$model = $this->getModel($this->_mainmodel);
-	    $ada = new AdaloginModelAda_obj();	
+	  $ada = new AdaloginModelAda_obj();	
 		$model->set('PSW',$ada->joomla_psw);
 		$view->setModel($model,true);
 		$user = $model->getUser($adaid, $adaemail);
