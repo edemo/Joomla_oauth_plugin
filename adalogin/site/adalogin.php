@@ -4,7 +4,7 @@
 * @package	Adalogin
 * @copyright	Copyright (C) 2016, Fogler Tibor. All rights reserved.
 * @license #GNU/GPL
- */
+*/
 
 //--No direct access
 defined('_JEXEC') or die('=;)');
